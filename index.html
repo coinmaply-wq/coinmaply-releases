@@ -371,9 +371,15 @@
 
       <div class="form-title">🏪 Dados do Estabelecimento</div>
 
-      <div class="form-group">
-        <label>Nome do Estabelecimento <span>*</span></label>
-        <input type="text" id="f-nome" placeholder="Ex: Pizzaria do João"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nome do Estabelecimento <span>*</span></label>
+          <input type="text" id="f-nome" placeholder="Ex: Pizzaria do João"/>
+        </div>
+        <div class="form-group">
+          <label>CNPJ <span style="color:var(--muted);font-size:0.8rem;">(apenas registro)</span></label>
+          <input type="text" id="f-cnpj-num" placeholder="00.000.000/0000-00"/>
+        </div>
       </div>
 
       <div class="form-row">
@@ -381,32 +387,64 @@
           <label>Categoria <span>*</span></label>
           <select id="f-categoria">
             <option value="">Selecione...</option>
-            <option>Restaurante</option>
-            <option>Lanchonete / Fast Food</option>
-            <option>Bar / Pub</option>
-            <option>Cafeteria</option>
-            <option>Padaria</option>
-            <option>Mercado / Supermercado</option>
-            <option>Farmácia</option>
-            <option>Posto de Combustível</option>
-            <option>Loja de Roupas</option>
-            <option>Eletrônicos</option>
-            <option>Serviços</option>
-            <option>Hospedagem / Hotel</option>
-            <option>Clínica / Saúde</option>
-            <option>Educação</option>
-            <option>Outro</option>
+            <option>Bares</option>
+            <option>Restaurantes</option>
+            <option>Postos</option>
+            <option>Hotéis</option>
+            <option>Locadoras</option>
+            <option>Salões</option>
+            <option>Joalherias</option>
+            <option>Pet Shops</option>
+            <option>Shopping</option>
+            <option>Cafeterias</option>
+            <option>Entretenimento</option>
+            <option>Varejo</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Telefone / WhatsApp <span>*</span></label>
+          <label>Telefone <span>*</span></label>
           <input type="tel" id="f-telefone" placeholder="(48) 99999-9999"/>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Endereço Completo <span>*</span></label>
-        <input type="text" id="f-endereco" placeholder="Rua, número, bairro, cidade, estado"/>
+        <label>WhatsApp</label>
+        <input type="tel" id="f-whatsapp" placeholder="(48) 99999-9999"/>
+      </div>
+
+      <div class="form-title" style="margin-top:8px;">📍 Endereço</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Rua/Av <span>*</span></label>
+          <input type="text" id="f-rua" placeholder="Ex: Rua Faria Lima"/>
+        </div>
+        <div class="form-group">
+          <label>Número</label>
+          <input type="text" id="f-numero" placeholder="Ex: 450"/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Bairro</label>
+          <input type="text" id="f-bairro" placeholder="Ex: Centro"/>
+        </div>
+        <div class="form-group">
+          <label>CEP <span style="color:var(--muted);font-size:0.8rem;">(apenas registro)</span></label>
+          <input type="text" id="f-cep" placeholder="00000-000"/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cidade <span>*</span></label>
+          <input type="text" id="f-cidade" placeholder="Ex: Criciúma"/>
+        </div>
+        <div class="form-group">
+          <label>Estado <span>*</span></label>
+          <input type="text" id="f-estado" placeholder="SC" maxlength="2" style="text-transform:uppercase;"/>
+        </div>
       </div>
 
       <div class="form-group">
@@ -549,33 +587,52 @@
 
     const nome = document.getElementById('f-nome').value.trim();
     const categoria = document.getElementById('f-categoria').value;
+    const cnpjNum = document.getElementById('f-cnpj-num').value.trim();
     const telefone = document.getElementById('f-telefone').value.trim();
-    const endereco = document.getElementById('f-endereco').value.trim();
+    const whatsapp = document.getElementById('f-whatsapp').value.trim();
+    const rua = document.getElementById('f-rua').value.trim();
+    const numero = document.getElementById('f-numero').value.trim();
+    const bairro = document.getElementById('f-bairro').value.trim();
+    const cidade = document.getElementById('f-cidade').value.trim();
+    const estado = document.getElementById('f-estado').value.trim().toUpperCase();
+    const cep = document.getElementById('f-cep').value.trim();
     const descricao = document.getElementById('f-descricao').value.trim();
     const email = document.getElementById('f-email').value.trim();
     const email2 = document.getElementById('f-email2').value.trim();
-    const cnpj = document.getElementById('f-cnpj').files[0];
+    const cnpjArquivo = document.getElementById('f-cnpj').files[0];
     const criptos = Array.from(document.querySelectorAll('.cripto-item input:checked')).map(c => c.value);
+
+    const enderecoFull = rua + (numero ? ', ' + numero : '') + (bairro ? ', ' + bairro : '') + (cidade ? ', ' + cidade : '') + (estado ? ' - ' + estado : '');
 
     if (!nome) { mostrarErro('Informe o nome do estabelecimento.'); return; }
     if (!categoria) { mostrarErro('Selecione a categoria.'); return; }
-    if (!telefone) { mostrarErro('Informe o telefone/WhatsApp.'); return; }
-    if (!endereco) { mostrarErro('Informe o endereço completo.'); return; }
+    if (!telefone) { mostrarErro('Informe o telefone.'); return; }
+    if (!rua) { mostrarErro('Informe a rua/avenida.'); return; }
+    if (!cidade) { mostrarErro('Informe a cidade.'); return; }
+    if (!estado) { mostrarErro('Informe o estado (UF).'); return; }
     if (!email) { mostrarErro('Informe o email.'); return; }
     if (email !== email2) { mostrarErro('Os emails não coincidem.'); return; }
     if (criptos.length === 0) { mostrarErro('Selecione ao menos uma criptomoeda.'); return; }
-    if (!cnpj) { mostrarErro('Anexe a foto do cartão CNPJ.'); return; }
+    if (!cnpjArquivo) { mostrarErro('Anexe a foto do cartão CNPJ.'); return; }
 
     const fd = new FormData();
     fd.append('_subject', 'Novo Cadastro CoinMaply: ' + nome);
     fd.append('Nome', nome);
+    fd.append('CNPJ', cnpjNum || 'Não informado');
     fd.append('Categoria', categoria);
     fd.append('Telefone', telefone);
-    fd.append('Endereco', endereco);
+    fd.append('WhatsApp', whatsapp || 'Não informado');
+    fd.append('Rua', rua);
+    fd.append('Numero', numero || 'S/N');
+    fd.append('Bairro', bairro || 'Não informado');
+    fd.append('Cidade', cidade);
+    fd.append('Estado', estado);
+    fd.append('CEP', cep || 'Não informado');
+    fd.append('Endereco', enderecoFull);
     fd.append('Descricao', descricao || 'Não informado');
     fd.append('Email', email);
     fd.append('Criptomoedas', criptos.join(', '));
-    fd.append('CNPJ', cnpj);
+    fd.append('Comprovante_CNPJ', cnpjArquivo);
 
     const btn = document.querySelector('#form-content .btn-primary');
     btn.textContent = '⏳ Enviando...';

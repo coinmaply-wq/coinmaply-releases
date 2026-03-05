@@ -250,7 +250,8 @@
   <ul class="nav-links">
     <li><a href="#features">Recursos</a></li>
     <li><a href="#tutoriais">Tutoriais</a></li>
-    <li><a href="#cadastro-form">Cadastre-se</a></li>
+    <li><a href="#cadastro-form" onclick="document.getElementById('cadastro-form').style.display='block'">Cadastre-se</a></li>
+    <li><a href="#estabelecimentos">Estabelecimentos</a></li>
     <li><a href="#download">Download</a></li>
     <li><a href="#suporte">Suporte</a></li>
   </ul>
@@ -260,7 +261,7 @@
 <div class="mobile-menu" id="mobileMenu">
   <a href="#features" onclick="toggleMenu()">Recursos</a>
   <a href="#tutoriais" onclick="toggleMenu()">Tutoriais</a>
-  <a href="#cadastro-form" onclick="toggleMenu()">Cadastre seu Negócio</a>
+  <a href="#cadastro-form" onclick="toggleMenu(); document.getElementById('cadastro-form').style.display='block'">Cadastre seu Negócio</a>
   <a href="#download" onclick="toggleMenu()">Download</a>
   <a href="#suporte" onclick="toggleMenu()">Suporte</a>
 </div>
@@ -273,7 +274,7 @@
     <p>Encontre e cadastre estabelecimentos que aceitam Bitcoin e criptomoedas perto de você. Grátis para sempre.</p>
     <div class="hero-buttons">
       <a href="https://github.com/coinmaply-wq/coinmaply-releases/releases/download/v1.0.6/coinmaply-mobile-v1_0_6.apk" class="btn-primary">📲 Baixar para Android</a>
-      <a href="#cadastro-form" class="btn-secondary">🏪 Cadastrar meu Negócio</a>
+      <button onclick="document.getElementById('cadastro-form').style.display='block'; setTimeout(()=>document.getElementById('cadastro-form').scrollIntoView({behavior:'smooth'}),100);" class="btn-secondary">🏪 Cadastrar meu Negócio</button>
     </div>
   </div>
 </section>
@@ -282,7 +283,7 @@
   <div class="stat"><div class="stat-num">59+</div><div class="stat-label">Estabelecimentos cadastrados</div></div>
   <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Criptomoedas aceitas</div></div>
   <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratuito para cadastrar</div></div>
-  <div class="stat"><div class="stat-num">90</div><div class="stat-label">Dias de trial grátis</div></div>
+  <div class="stat"><div class="stat-num">45</div><div class="stat-label">Dias de trial grátis</div></div>
 </div>
 
 <section class="section" id="features">
@@ -292,7 +293,7 @@
   <div class="features-grid">
     <div class="feature-card"><div class="feature-icon">🗺️</div><div class="feature-title">Mapa Interativo</div><div class="feature-desc">Veja todos os estabelecimentos próximos em tempo real com sua localização.</div></div>
     <div class="feature-card"><div class="feature-icon">🔍</div><div class="feature-title">Busca Inteligente</div><div class="feature-desc">Filtre por categoria, criptomoeda aceita e distância para encontrar o que precisa.</div></div>
-    <div class="feature-card"><div class="feature-icon">🏪</div><div class="feature-title">Cadastro Gratuito</div><div class="feature-desc">Cadastre seu negócio grátis com 90 dias de trial completo.</div></div>
+    <div class="feature-card"><div class="feature-icon">🏪</div><div class="feature-title">Cadastro Gratuito</div><div class="feature-desc">Cadastre seu negócio grátis com 45 dias de trial completo.</div></div>
     <div class="feature-card"><div class="feature-icon">💰</div><div class="feature-title">10+ Criptomoedas</div><div class="feature-desc">Bitcoin, Ethereum, USDT, USDC, BNB, XRP, Solana e muito mais.</div></div>
     <div class="feature-card"><div class="feature-icon">⭐</div><div class="feature-title">Avaliações</div><div class="feature-desc">Avalie e leia reviews de outros usuários sobre os estabelecimentos.</div></div>
     <div class="feature-card"><div class="feature-icon">📍</div><div class="feature-title">Como Chegar</div><div class="feature-desc">Integração com Google Maps para traçar rotas com um toque.</div></div>
@@ -351,16 +352,16 @@
         <div style="font-size:2.8rem; margin-bottom:16px;">📋</div>
         <div style="font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; margin-bottom:10px;">Pelo Formulário</div>
         <div style="color:var(--muted); font-size:0.88rem; line-height:1.6; margin-bottom:24px;">Prefere pelo computador? Preencha aqui e nós cadastramos seu negócio em até 24 horas.</div>
-        <a href="#cadastro-form" class="btn-secondary" style="font-size:0.9rem; padding:12px 20px; width:100%;">
+        <button onclick="document.getElementById('cadastro-form').style.display='block'; setTimeout(()=>document.getElementById('cadastro-form').scrollIntoView({behavior:'smooth'}),100);" class="btn-secondary" style="font-size:0.9rem; padding:12px 20px; width:100%;">
           📋 Preencher Formulário
-        </a>
+        </button>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FORMULÁRIO -->
-<section class="form-section" id="cadastro-form">
+<section class="form-section" id="cadastro-form" style="display:none;">
   <div class="section-label" style="text-align:center;">Cadastro Online</div>
   <h2 class="section-title" style="text-align:center;">Cadastre seu<br/><span>estabelecimento</span></h2>
   <p class="section-sub" style="text-align:center; max-width:100%; margin-bottom:40px;">Preencha o formulário. Em até 24 horas analisamos e cadastramos seu negócio no mapa!</p>
@@ -385,21 +386,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Categoria <span>*</span></label>
-          <select id="f-categoria">
-            <option value="">Selecione...</option>
-            <option>Bares</option>
-            <option>Restaurantes</option>
-            <option>Postos</option>
-            <option>Hotéis</option>
-            <option>Locadoras</option>
-            <option>Salões</option>
-            <option>Joalherias</option>
-            <option>Pet Shops</option>
-            <option>Shopping</option>
-            <option>Cafeterias</option>
-            <option>Entretenimento</option>
-            <option>Varejo</option>
-          </select>
+          <select id="f-categoria"><option value="">Carregando...</option></select>
         </div>
         <div class="form-group">
           <label>Telefone <span>*</span></label>
@@ -483,17 +470,7 @@
         <label class="cripto-item"><input type="checkbox" value="Outra"/> Outra</label>
       </div>
 
-      <hr class="form-divider"/>
-      <div class="form-title">📄 Comprovante do Negócio</div>
-      <div class="form-group">
-        <label>Foto do Cartão CNPJ ou Comprovante <span>*</span></label>
-        <div class="file-upload" onclick="document.getElementById('f-cnpj').click()">
-          <input type="file" id="f-cnpj" accept="image/*,.pdf" style="display:none" onchange="mostrarArquivo(this)"/>
-          📎 Clique aqui para anexar a foto do CNPJ<br/>
-          <span style="font-size:0.8rem;">JPG, PNG ou PDF • máx. 5MB</span>
-          <div id="file-name"></div>
-        </div>
-      </div>
+
 
       <div id="form-error" style="display:none; color:#ff6b6b; font-size:0.88rem; margin-bottom:16px; padding:12px; background:rgba(255,107,107,0.1); border-radius:8px;"></div>
 
@@ -509,6 +486,127 @@
     </div>
   </div>
 </section>
+
+
+<!-- BUSCA DE ESTABELECIMENTOS -->
+<section style="position:relative; z-index:1; padding:80px 20px; background:rgba(255,149,0,0.02); border-top:1px solid var(--border);" id="estabelecimentos">
+  <div style="max-width:900px; margin:0 auto;">
+    <div class="section-label" style="text-align:center;">Estabelecimentos</div>
+    <h2 class="section-title" style="text-align:center;">Encontre onde<br/><span>gastar suas criptos</span></h2>
+    <p style="color:var(--muted); text-align:center; font-size:1rem; line-height:1.7; margin-bottom:40px;">Veja todos os estabelecimentos cadastrados no CoinMaply.</p>
+
+    <!-- Busca -->
+    <div style="display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap;">
+      <input type="text" id="busca-nome" placeholder="🔍 Buscar por nome ou cidade..." oninput="filtrarEstabelecimentos()"
+        style="flex:1; min-width:200px; background:#111; border:1px solid var(--border); border-radius:10px; padding:14px 16px; color:var(--text); font-size:0.95rem; font-family:'DM Sans',sans-serif;"/>
+      <select id="busca-categoria" onchange="filtrarEstabelecimentos()"
+        style="background:#111; border:1px solid var(--border); border-radius:10px; padding:14px 16px; color:var(--text); font-size:0.95rem; font-family:'DM Sans',sans-serif;">
+        <option value="">Todas as categorias</option>
+      </select>
+    </div>
+
+    <!-- Lista -->
+    <div id="lista-estabelecimentos" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:16px;">
+      <div style="text-align:center; padding:40px; color:var(--muted); grid-column:1/-1;">⏳ Carregando estabelecimentos...</div>
+    </div>
+    <div id="lista-vazia" style="display:none; text-align:center; padding:40px; color:var(--muted);">Nenhum estabelecimento encontrado.</div>
+  </div>
+</section>
+
+<script>
+  let todosEstabelecimentos = [];
+  const SUPABASE_URL = 'https://jqtguxggubciwmklpclx.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxdGd1eGdndWJjaXdta2xwY2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NjI4NDIsImV4cCI6MjA1NjQzODg0Mn0.U9-tFYCjnuNkqcSHb1bXFPPMV_yMi-xm4V8UXlwBuyI';
+  const HEADERS_SUPABASE = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': 'Bearer ' + SUPABASE_KEY,
+    'Content-Type': 'application/json'
+  };
+
+  const CATEGORIAS_FALLBACK = ['Bares','Cafeterias','Entretenimento','Hot\u00e9is','Joalherias','Postos','Restaurantes','Sa\u00fade','Servi\u00e7os','Varejo'];
+
+  async function carregarCategorias() {
+    let nomes = CATEGORIAS_FALLBACK;
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/categorias?select=nome&order=nome', {
+        method: 'GET', mode: 'cors', headers: HEADERS_SUPABASE
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.length > 0) nomes = data.map(c => c.nome);
+      }
+    } catch(e) {
+      console.warn('Categorias do Supabase indispon\u00edveis, usando lista padr\u00e3o.');
+    }
+    const selForm = document.getElementById('f-categoria');
+    selForm.innerHTML = '<option value="">Selecione...</option>' + nomes.map(n => `<option>${n}</option>`).join('');
+    const selFiltro = document.getElementById('busca-categoria');
+    if (selFiltro) selFiltro.innerHTML = '<option value="">Todas as categorias</option>' + nomes.map(n => `<option>${n}</option>`).join('');
+  }
+
+  async function carregarEstabelecimentos() {
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/establishments?status=eq.active&select=name,category,address,city,state,phone,whatsapp,cryptos,description', {
+        method: 'GET',
+        mode: 'cors',
+        headers: HEADERS_SUPABASE
+      });
+      if (res.ok) {
+        todosEstabelecimentos = await res.json();
+      } else {
+        todosEstabelecimentos = [];
+      }
+      filtrarEstabelecimentos();
+    } catch(e) {
+      todosEstabelecimentos = [];
+      filtrarEstabelecimentos();
+      console.warn('Estabelecimentos indisponíveis:', e.message);
+    }
+  }
+
+  function filtrarEstabelecimentos() {
+    const busca = document.getElementById('busca-nome').value.toLowerCase();
+    const categoria = document.getElementById('busca-categoria').value;
+    const lista = document.getElementById('lista-estabelecimentos');
+    const vazia = document.getElementById('lista-vazia');
+
+    let filtrados = todosEstabelecimentos.filter(e => {
+      const matchBusca = !busca || e.name?.toLowerCase().includes(busca) || e.city?.toLowerCase().includes(busca) || e.address?.toLowerCase().includes(busca);
+      const matchCategoria = !categoria || e.category === categoria;
+      return matchBusca && matchCategoria;
+    });
+
+    if (filtrados.length === 0) {
+      lista.innerHTML = '';
+      vazia.style.display = 'block';
+      return;
+    }
+    vazia.style.display = 'none';
+
+    lista.innerHTML = filtrados.map(e => {
+      const criptos = Array.isArray(e.cryptos) ? e.cryptos.slice(0,3).join(', ') : (e.cryptos || '');
+      return `
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:16px; padding:24px; transition:all 0.3s;"
+             onmouseover="this.style.borderColor='rgba(255,149,0,0.4)'; this.style.transform='translateY(-4px)'"
+             onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:1rem;">${e.name || ''}</div>
+            <span style="background:rgba(255,149,0,0.1); color:var(--orange); font-size:0.72rem; font-weight:600; padding:3px 10px; border-radius:20px; white-space:nowrap; margin-left:8px;">${e.category || ''}</span>
+          </div>
+          <div style="color:var(--muted); font-size:0.85rem; margin-bottom:8px;">📍 ${e.address || ''} ${e.city ? '— '+e.city : ''} ${e.state ? '/'+e.state : ''}</div>
+          ${e.description ? `<div style="color:var(--muted); font-size:0.82rem; line-height:1.5; margin-bottom:10px;">${e.description.substring(0,80)}${e.description.length>80?'...':''}</div>` : ''}
+          <div style="color:var(--orange); font-size:0.8rem; font-weight:600;">₿ ${criptos}</div>
+          <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
+            ${e.phone ? `<a href="tel:${e.phone}" style="background:#111; border:1px solid var(--border); color:var(--text); text-decoration:none; padding:7px 14px; border-radius:8px; font-size:0.8rem;">📞 Ligar</a>` : ''}
+            ${e.whatsapp ? `<a href="https://wa.me/55${e.whatsapp.replace(/\D/g,'')}" target="_blank" style="background:rgba(37,211,102,0.1); border:1px solid rgba(37,211,102,0.3); color:#25d366; text-decoration:none; padding:7px 14px; border-radius:8px; font-size:0.8rem;">💬 WhatsApp</a>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  carregarCategorias();
+  carregarEstabelecimentos();
+</script>
 
 <section class="download-section" id="download">
   <div class="section-label" style="margin-bottom:12px;">Download</div>
@@ -573,14 +671,6 @@
     document.getElementById('mobileMenu').classList.toggle('open');
   }
 
-  function mostrarArquivo(input) {
-    document.getElementById('file-name').textContent = input.files[0] ? '✅ ' + input.files[0].name : '';
-  }
-
-  document.getElementById('f-cnpj').addEventListener('change', function() {
-    mostrarArquivo(this);
-  });
-
   async function enviarFormulario() {
     const erro = document.getElementById('form-error');
     erro.style.display = 'none';
@@ -599,7 +689,6 @@
     const descricao = document.getElementById('f-descricao').value.trim();
     const email = document.getElementById('f-email').value.trim();
     const email2 = document.getElementById('f-email2').value.trim();
-    const cnpjArquivo = document.getElementById('f-cnpj').files[0];
     const criptos = Array.from(document.querySelectorAll('.cripto-item input:checked')).map(c => c.value);
 
     const enderecoFull = rua + (numero ? ', ' + numero : '') + (bairro ? ', ' + bairro : '') + (cidade ? ', ' + cidade : '') + (estado ? ' - ' + estado : '');
@@ -613,7 +702,6 @@
     if (!email) { mostrarErro('Informe o email.'); return; }
     if (email !== email2) { mostrarErro('Os emails não coincidem.'); return; }
     if (criptos.length === 0) { mostrarErro('Selecione ao menos uma criptomoeda.'); return; }
-    if (!cnpjArquivo) { mostrarErro('Anexe a foto do cartão CNPJ.'); return; }
 
     const fd = new FormData();
     fd.append('_subject', 'Novo Cadastro CoinMaply: ' + nome);
@@ -632,21 +720,48 @@
     fd.append('Descricao', descricao || 'Não informado');
     fd.append('Email', email);
     fd.append('Criptomoedas', criptos.join(', '));
-    fd.append('Comprovante_CNPJ', cnpjArquivo);
 
     const btn = document.querySelector('#form-content .btn-primary');
     btn.textContent = '⏳ Enviando...';
     btn.disabled = true;
 
+    const enderecoFull2 = rua + (numero ? ', ' + numero : '') + (bairro ? ', ' + bairro : '') + (cidade ? ', ' + cidade : '') + (estado ? ' - ' + estado : '');
+
+    const payload = {
+      name: nome,
+      category: categoria,
+      street: rua || null,
+      number: numero || null,
+      neighborhood: bairro || null,
+      city: cidade || null,
+      state: estado || null,
+      cep: cep || null,
+      cnpj: cnpjNum || null,
+      address: enderecoFull2,
+      phone: telefone || null,
+      whatsapp: whatsapp || null,
+      email: email || null,
+      description: descricao || null,
+      cryptos: criptos,
+      photos: [],
+      lat: 0,
+      lng: 0,
+      plan: 'basic',
+      status: 'pending'
+    };
+
     try {
-      const res = await fetch('https://formspree.io/f/xqedolqj', {
-        method: 'POST', body: fd, headers: { 'Accept': 'application/json' }
+      const res = await fetch(SUPABASE_URL + '/rest/v1/establishments', {
+        method: 'POST',
+        headers: { ...HEADERS_SUPABASE, 'Prefer': 'return=minimal' },
+        body: JSON.stringify(payload)
       });
-      if (res.ok) {
+      if (res.ok || res.status === 201) {
         document.getElementById('form-content').style.display = 'none';
         document.getElementById('form-success').style.display = 'block';
       } else {
-        mostrarErro('Erro ao enviar. Tente novamente ou use o WhatsApp.');
+        const errData = await res.json().catch(() => ({}));
+        mostrarErro('Erro ao enviar: ' + (errData.message || errData.details || res.status + ' - Verifique as configurações do Supabase.'));
         btn.textContent = '🚀 Enviar Cadastro';
         btn.disabled = false;
       }

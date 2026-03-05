@@ -528,7 +528,7 @@
   async function carregarCategorias() {
     let nomes = CATEGORIAS_FALLBACK;
     try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/categorias?select=nome&order=nome', {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/categories?select=nome&order=nome', {
         method: 'GET', mode: 'cors', headers: HEADERS_SUPABASE
       });
       if (res.ok) {

@@ -262,6 +262,7 @@
   <a href="#features" onclick="toggleMenu()">Recursos</a>
   <a href="#tutoriais" onclick="toggleMenu()">Tutoriais</a>
   <a href="#cadastro-form" onclick="toggleMenu(); document.getElementById('cadastro-form').style.display='block'">Cadastre seu Negócio</a>
+  <a href="#estabelecimentos" onclick="toggleMenu()">Estabelecimentos</a>
   <a href="#download" onclick="toggleMenu()">Download</a>
   <a href="#suporte" onclick="toggleMenu()">Suporte</a>
 </div>
@@ -273,7 +274,8 @@
     <h1>O mapa da<br/><span>nova economia</span></h1>
     <p>Encontre e cadastre estabelecimentos que aceitam Bitcoin e criptomoedas perto de você. Grátis para sempre.</p>
     <div class="hero-buttons">
-      <a href="https://github.com/coinmaply-wq/coinmaply-releases/releases/download/v1.0.6/coinmaply-mobile-v1_0_6.apk" class="btn-primary">📲 Baixar para Android</a>
+      <a href="https://github.com/coinmaply-wq/coinmaply-releases/releases/download/v5.0/CoinMaply_v5.apk" class="btn-primary">📲 Baixar para Android</a>
+      <p style="color:var(--muted); font-size:0.8rem; margin-top:12px;">🍎 iPhone — Em breve na App Store</p>
       <button onclick="document.getElementById('cadastro-form').style.display='block'; setTimeout(()=>document.getElementById('cadastro-form').scrollIntoView({behavior:'smooth'}),100);" class="btn-secondary">🏪 Cadastrar meu Negócio</button>
     </div>
   </div>
@@ -342,7 +344,7 @@
         <div style="font-size:2.8rem; margin-bottom:16px;">📱</div>
         <div style="font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; margin-bottom:10px;">Pelo App</div>
         <div style="color:var(--muted); font-size:0.88rem; line-height:1.6; margin-bottom:24px;">Baixe o CoinMaply e cadastre seu negócio direto pelo celular em menos de 5 minutos.</div>
-        <a href="https://github.com/coinmaply-wq/coinmaply-releases/releases/download/v1.0.6/coinmaply-mobile-v1_0_6.apk" class="btn-primary" style="font-size:0.9rem; padding:12px 20px; width:100%;">
+        <a href="https://github.com/coinmaply-wq/coinmaply-releases/releases/download/v5.0/CoinMaply_v5.apk" class="btn-primary" style="font-size:0.9rem; padding:12px 20px; width:100%;">
           📲 Baixar o App
         </a>
       </div>
@@ -517,50 +519,38 @@
   let todosEstabelecimentos = [];
   const SUPABASE_URL = 'https://jqtguxggubciwmklpclx.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxdGd1eGdndWJjaXdta2xwY2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NjI4NDIsImV4cCI6MjA1NjQzODg0Mn0.U9-tFYCjnuNkqcSHb1bXFPPMV_yMi-xm4V8UXlwBuyI';
-  const HEADERS_SUPABASE = {
-    'apikey': SUPABASE_KEY,
-    'Authorization': 'Bearer ' + SUPABASE_KEY,
-    'Content-Type': 'application/json'
-  };
-
-  const CATEGORIAS_FALLBACK = ['Bares','Cafeterias','Entretenimento','Hot\u00e9is','Joalherias','Postos','Restaurantes','Sa\u00fade','Servi\u00e7os','Varejo'];
 
   async function carregarCategorias() {
-    let nomes = CATEGORIAS_FALLBACK;
     try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/categories?select=nome&order=nome', {
-        method: 'GET', mode: 'cors', headers: HEADERS_SUPABASE
+      const res = await fetch(SUPABASE_URL + '/rest/v1/categories?select=name&order=nome', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
       });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.length > 0) nomes = data.map(c => c.nome);
+      const data = await res.json();
+      if (data && data.length > 0) {
+        // Preencher select do formulário
+        const selForm = document.getElementById('f-categoria');
+        selForm.innerHTML = '<option value="">Selecione...</option>' + data.map(c => `<option>${c.name}</option>`).join('');
+        // Preencher select do filtro
+        const selFiltro = document.getElementById('busca-categoria');
+        selFiltro.innerHTML = '<option value="">Todas as categorias</option>' + data.map(c => `<option>${c.name}</option>`).join('');
       }
     } catch(e) {
-      console.warn('Categorias do Supabase indispon\u00edveis, usando lista padr\u00e3o.');
+      console.error('Erro ao carregar categorias', e);
     }
-    const selForm = document.getElementById('f-categoria');
-    selForm.innerHTML = '<option value="">Selecione...</option>' + nomes.map(n => `<option>${n}</option>`).join('');
-    const selFiltro = document.getElementById('busca-categoria');
-    if (selFiltro) selFiltro.innerHTML = '<option value="">Todas as categorias</option>' + nomes.map(n => `<option>${n}</option>`).join('');
   }
 
   async function carregarEstabelecimentos() {
     try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/establishments?status=eq.active&select=name,category,address,city,state,phone,whatsapp,cryptos,description', {
-        method: 'GET',
-        mode: 'cors',
-        headers: HEADERS_SUPABASE
+      const res = await fetch('https://jqtguxggubciwmklpclx.supabase.co/rest/v1/establishments?status=eq.active&select=name,category,address,city,state,phone,whatsapp,cryptos,description', {
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxdGd1eGdndWJjaXdta2xwY2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NjI4NDIsImV4cCI6MjA1NjQzODg0Mn0.U9-tFYCjnuNkqcSHb1bXFPPMV_yMi-xm4V8UXlwBuyI',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxdGd1eGdndWJjaXdta2xwY2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NjI4NDIsImV4cCI6MjA1NjQzODg0Mn0.U9-tFYCjnuNkqcSHb1bXFPPMV_yMi-xm4V8UXlwBuyI'
+        }
       });
-      if (res.ok) {
-        todosEstabelecimentos = await res.json();
-      } else {
-        todosEstabelecimentos = [];
-      }
+      todosEstabelecimentos = await res.json();
       filtrarEstabelecimentos();
     } catch(e) {
-      todosEstabelecimentos = [];
-      filtrarEstabelecimentos();
-      console.warn('Estabelecimentos indisponíveis:', e.message);
+      document.getElementById('lista-estabelecimentos').innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);grid-column:1/-1;">❌ Erro ao carregar. Tente novamente.</div>';
     }
   }
 
@@ -612,7 +602,7 @@
   <div class="section-label" style="margin-bottom:12px;">Download</div>
   <h2>Baixe agora.<br/>É <span style="color:var(--orange)">gratuito.</span></h2>
   <p>Disponível para Android. Versão iOS em breve.</p>
-  <a href="https://github.com/coinmaply-wq/coinmaply-releases/releases/download/v1.0.6/coinmaply-mobile-v1_0_6.apk" class="btn-primary" style="margin:0 auto;">🤖 Download Android APK</a>
+  <a href="https://github.com/coinmaply-wq/coinmaply-releases/releases/download/v5.0/CoinMaply_v5.apk" class="btn-primary" style="margin:0 auto;">🤖 Download Android APK</a>
   <div class="version-info">Versão 1.0.6 Beta • 50.5 MB • Android 8.0+</div>
 </section>
 
@@ -689,6 +679,7 @@
     const descricao = document.getElementById('f-descricao').value.trim();
     const email = document.getElementById('f-email').value.trim();
     const email2 = document.getElementById('f-email2').value.trim();
+    if (email !== email2) { mostrarErro('Os emails não conferem. Verifique e tente novamente.'); return; }
     const criptos = Array.from(document.querySelectorAll('.cripto-item input:checked')).map(c => c.value);
 
     const enderecoFull = rua + (numero ? ', ' + numero : '') + (bairro ? ', ' + bairro : '') + (cidade ? ', ' + cidade : '') + (estado ? ' - ' + estado : '');
@@ -725,43 +716,15 @@
     btn.textContent = '⏳ Enviando...';
     btn.disabled = true;
 
-    const enderecoFull2 = rua + (numero ? ', ' + numero : '') + (bairro ? ', ' + bairro : '') + (cidade ? ', ' + cidade : '') + (estado ? ' - ' + estado : '');
-
-    const payload = {
-      name: nome,
-      category: categoria,
-      street: rua || null,
-      number: numero || null,
-      neighborhood: bairro || null,
-      city: cidade || null,
-      state: estado || null,
-      cep: cep || null,
-      cnpj: cnpjNum || null,
-      address: enderecoFull2,
-      phone: telefone || null,
-      whatsapp: whatsapp || null,
-      email: email || null,
-      description: descricao || null,
-      cryptos: criptos,
-      photos: [],
-      lat: 0,
-      lng: 0,
-      plan: 'basic',
-      status: 'pending'
-    };
-
     try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/establishments', {
-        method: 'POST',
-        headers: { ...HEADERS_SUPABASE, 'Prefer': 'return=minimal' },
-        body: JSON.stringify(payload)
+      const res = await fetch('https://formspree.io/f/xqedolqj', {
+        method: 'POST', body: fd, headers: { 'Accept': 'application/json' }
       });
-      if (res.ok || res.status === 201) {
+      if (res.ok) {
         document.getElementById('form-content').style.display = 'none';
         document.getElementById('form-success').style.display = 'block';
       } else {
-        const errData = await res.json().catch(() => ({}));
-        mostrarErro('Erro ao enviar: ' + (errData.message || errData.details || res.status + ' - Verifique as configurações do Supabase.'));
+        mostrarErro('Erro ao enviar. Tente novamente ou use o WhatsApp.');
         btn.textContent = '🚀 Enviar Cadastro';
         btn.disabled = false;
       }

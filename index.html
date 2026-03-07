@@ -518,11 +518,11 @@
 <script>
   let todosEstabelecimentos = [];
   const SUPABASE_URL = 'https://jqtguxggubciwmklpclx.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxdGd1eGdndWJjaXdta2xwY2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NjI4NDIsImV4cCI6MjA1NjQzODg0Mn0.U9-tFYCjnuNkqcSHb1bXFPPMV_yMi-xm4V8UXlwBuyI';
+  const SUPABASE_KEY = 'sb_publishable_26bNKamD8EejWw6mcQyS4w_AYse-B24';
 
   async function carregarCategorias() {
     try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/categories?select=name&order=nome', {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/categories?select=name&order=name', {
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
       });
       const data = await res.json();
@@ -543,8 +543,8 @@
     try {
       const res = await fetch('https://jqtguxggubciwmklpclx.supabase.co/rest/v1/establishments?status=eq.active&select=name,category,address,city,state,phone,whatsapp,cryptos,description', {
         headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxdGd1eGdndWJjaXdta2xwY2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NjI4NDIsImV4cCI6MjA1NjQzODg0Mn0.U9-tFYCjnuNkqcSHb1bXFPPMV_yMi-xm4V8UXlwBuyI',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxdGd1eGdndWJjaXdta2xwY2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NjI4NDIsImV4cCI6MjA1NjQzODg0Mn0.U9-tFYCjnuNkqcSHb1bXFPPMV_yMi-xm4V8UXlwBuyI'
+          'apikey': 'sb_publishable_26bNKamD8EejWw6mcQyS4w_AYse-B24',
+          'Authorization': 'Bearer sb_publishable_26bNKamD8EejWw6mcQyS4w_AYse-B24'
         }
       });
       todosEstabelecimentos = await res.json();

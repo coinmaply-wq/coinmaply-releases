@@ -428,11 +428,11 @@
       <div class="form-row">
         <div class="form-group">
           <label>Cidade <span>*</span></label>
-          <input type="text" id="f-cidade" placeholder="Ex: Criciúma"/>
+          <input type="text" id="f-cidade" placeholder="Ex: São Paulo"/>
         </div>
         <div class="form-group">
           <label>Estado <span>*</span></label>
-          <input type="text" id="f-estado" placeholder="SC" maxlength="2" style="text-transform:uppercase;"/>
+          <input type="text" id="f-estado" placeholder="SP" maxlength="2" style="text-transform:uppercase;"/>
         </div>
       </div>
 
@@ -518,7 +518,7 @@
 <script>
   let todosEstabelecimentos = [];
   const SUPABASE_URL = 'https://jqtguxggubciwmklpclx.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_26bNKamD8EejWw6mcQyS4w_AYse-B24';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxdGd1eGdndWJjaXdta2xwY2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDU0MzAsImV4cCI6MjA4NzM4MTQzMH0.gDhOIZNWDdBxNYqu_EIO-1N-pcTTto7bELWkOFbgECc';
 
   async function carregarCategorias() {
     try {
@@ -543,8 +543,8 @@
     try {
       const res = await fetch('https://jqtguxggubciwmklpclx.supabase.co/rest/v1/establishments?status=eq.active&select=name,category,address,city,state,phone,whatsapp,cryptos,description', {
         headers: {
-          'apikey': 'sb_publishable_26bNKamD8EejWw6mcQyS4w_AYse-B24',
-          'Authorization': 'Bearer sb_publishable_26bNKamD8EejWw6mcQyS4w_AYse-B24'
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY
         }
       });
       todosEstabelecimentos = await res.json();
@@ -656,7 +656,7 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   function toggleMenu() {
     document.getElementById('mobileMenu').classList.toggle('open');
   }
@@ -679,10 +679,7 @@
     const descricao = document.getElementById('f-descricao').value.trim();
     const email = document.getElementById('f-email').value.trim();
     const email2 = document.getElementById('f-email2').value.trim();
-    if (email !== email2) { mostrarErro('Os emails não conferem. Verifique e tente novamente.'); return; }
     const criptos = Array.from(document.querySelectorAll('.cripto-item input:checked')).map(c => c.value);
-
-    const enderecoFull = rua + (numero ? ', ' + numero : '') + (bairro ? ', ' + bairro : '') + (cidade ? ', ' + cidade : '') + (estado ? ' - ' + estado : '');
 
     if (!nome) { mostrarErro('Informe o nome do estabelecimento.'); return; }
     if (!categoria) { mostrarErro('Selecione a categoria.'); return; }
@@ -694,37 +691,52 @@
     if (email !== email2) { mostrarErro('Os emails não coincidem.'); return; }
     if (criptos.length === 0) { mostrarErro('Selecione ao menos uma criptomoeda.'); return; }
 
-    const fd = new FormData();
-    fd.append('_subject', 'Novo Cadastro CoinMaply: ' + nome);
-    fd.append('Nome', nome);
-    fd.append('CNPJ', cnpjNum || 'Não informado');
-    fd.append('Categoria', categoria);
-    fd.append('Telefone', telefone);
-    fd.append('WhatsApp', whatsapp || 'Não informado');
-    fd.append('Rua', rua);
-    fd.append('Numero', numero || 'S/N');
-    fd.append('Bairro', bairro || 'Não informado');
-    fd.append('Cidade', cidade);
-    fd.append('Estado', estado);
-    fd.append('CEP', cep || 'Não informado');
-    fd.append('Endereco', enderecoFull);
-    fd.append('Descricao', descricao || 'Não informado');
-    fd.append('Email', email);
-    fd.append('Criptomoedas', criptos.join(', '));
-
     const btn = document.querySelector('#form-content .btn-primary');
     btn.textContent = '⏳ Enviando...';
     btn.disabled = true;
 
+    const enderecoFull = rua + (numero ? ', ' + numero : '') + (bairro ? ', ' + bairro : '') + (cidade ? ', ' + cidade : '') + (estado ? ' - ' + estado : '');
+
+    const dados = {
+      name: nome,
+      category: categoria,
+      cnpj: cnpjNum || null,
+      phone: telefone || null,
+      whatsapp: whatsapp || null,
+      street: rua || null,
+      number: numero || null,
+      neighborhood: bairro || null,
+      city: cidade,
+      state: estado,
+      cep: cep || null,
+      address: enderecoFull,
+      description: descricao || null,
+      email: email,
+      cryptos: criptos,
+      status: 'pending',
+      plan: 'basic',
+      created_at: new Date().toISOString()
+    };
+
     try {
-      const res = await fetch('https://formspree.io/f/xqedolqj', {
-        method: 'POST', body: fd, headers: { 'Accept': 'application/json' }
+      const res = await fetch(SUPABASE_URL + '/rest/v1/establishments', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(dados)
       });
-      if (res.ok) {
+
+      if (res.ok || res.status === 201) {
         document.getElementById('form-content').style.display = 'none';
         document.getElementById('form-success').style.display = 'block';
       } else {
+        const errData = await res.text();
         mostrarErro('Erro ao enviar. Tente novamente ou use o WhatsApp.');
+        console.error('Erro Supabase:', errData);
         btn.textContent = '🚀 Enviar Cadastro';
         btn.disabled = false;
       }

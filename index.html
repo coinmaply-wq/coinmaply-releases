@@ -293,7 +293,7 @@
   <h2 class="section-title">Tudo que você precisa<br/><span>em um só app</span></h2>
   <p class="section-sub">O CoinMaply conecta clientes que usam cripto com negócios que aceitam.</p>
   <div class="features-grid">
-    <div class="feature-card"><div class="feature-icon">🗺️</div><div class="feature-title">Mapa Interativo</div><div class="feature-desc">Veja todos os estabelecimentos próximos em tempo real com sua localização.</div></div>
+    
     <div class="feature-card"><div class="feature-icon">🔍</div><div class="feature-title">Busca Inteligente</div><div class="feature-desc">Filtre por categoria, criptomoeda aceita e distância para encontrar o que precisa.</div></div>
     <div class="feature-card"><div class="feature-icon">🏪</div><div class="feature-title">Cadastro Gratuito</div><div class="feature-desc">Cadastre seu negócio grátis com 45 dias de trial completo.</div></div>
     <div class="feature-card"><div class="feature-icon">💰</div><div class="feature-title">10+ Criptomoedas</div><div class="feature-desc">Bitcoin, Ethereum, USDT, USDC, BNB, XRP, Solana e muito mais.</div></div>
@@ -443,6 +443,9 @@
 
       <hr class="form-divider"/>
       <div class="form-title">📧 Dados de Acesso</div>
+      <div style="background:rgba(255,149,0,0.08); border:1px solid rgba(255,149,0,0.3); border-radius:10px; padding:12px 16px; margin-bottom:16px; font-size:0.85rem; color:var(--muted); line-height:1.6;">
+        📱 <strong style="color:var(--orange)">Importante:</strong> Após aprovação, use o app CoinMaply com este email e senha para editar seus dados e gerenciar seu plano.
+      </div>
 
       <div class="form-row">
         <div class="form-group">
@@ -452,6 +455,23 @@
         <div class="form-group">
           <label>Confirmar Email <span>*</span></label>
           <input type="email" id="f-email2" placeholder="seu@email.com"/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Senha <span>*</span></label>
+          <div style="position:relative;">
+            <input type="password" id="f-senha" placeholder="Mínimo 6 caracteres" style="width:100%;"/>
+            <button type="button" onclick="toggleSenhaForm('f-senha','btn-s1')" id="btn-s1" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);">👁️</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Confirmar Senha <span>*</span></label>
+          <div style="position:relative;">
+            <input type="password" id="f-senha2" placeholder="Repita a senha" style="width:100%;"/>
+            <button type="button" onclick="toggleSenhaForm('f-senha2','btn-s2')" id="btn-s2" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);">👁️</button>
+          </div>
         </div>
       </div>
 
@@ -541,7 +561,7 @@
 
   async function carregarEstabelecimentos() {
     try {
-      const res = await fetch('https://jqtguxggubciwmklpclx.supabase.co/rest/v1/establishments?status=eq.active&select=name,category,address,city,state,phone,whatsapp,cryptos,description', {
+      const res = await fetch('https://jqtguxggubciwmklpclx.supabase.co/rest/v1/establishments?status=eq.active&select=name,category,address,street,number,neighborhood,city,state,phone,whatsapp,cryptos,description', {
         headers: {
           'apikey': SUPABASE_KEY,
           'Authorization': 'Bearer ' + SUPABASE_KEY
@@ -583,7 +603,7 @@
             <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:1rem;">${e.name || ''}</div>
             <span style="background:rgba(255,149,0,0.1); color:var(--orange); font-size:0.72rem; font-weight:600; padding:3px 10px; border-radius:20px; white-space:nowrap; margin-left:8px;">${e.category || ''}</span>
           </div>
-          <div style="color:var(--muted); font-size:0.85rem; margin-bottom:8px;">📍 ${e.address || ''} ${e.city ? '— '+e.city : ''} ${e.state ? '/'+e.state : ''}</div>
+          <div style="color:var(--muted); font-size:0.85rem; margin-bottom:8px;">📍 ${e.street ? e.street + (e.number ? ', '+e.number : '') + (e.neighborhood ? ', '+e.neighborhood : '') : (e.address || '')} ${e.city ? '— '+e.city : ''} ${e.state ? '/'+e.state : ''}</div>
           ${e.description ? `<div style="color:var(--muted); font-size:0.82rem; line-height:1.5; margin-bottom:10px;">${e.description.substring(0,80)}${e.description.length>80?'...':''}</div>` : ''}
           <div style="color:var(--orange); font-size:0.8rem; font-weight:600;">₿ ${criptos}</div>
           <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
@@ -619,10 +639,10 @@
         <div class="suporte-desc">Atendimento rápido. Resposta em até 24h.</div>
         <span class="suporte-link">Abrir WhatsApp →</span>
       </a>
-      <a href="/cdn-cgi/l/email-protection#700305001f020415131f191e1d11001c0930171d11191c5e131f1d" class="suporte-card">
+      <a href="mailto:suportecoinmaply@gmail.com" class="suporte-card">
         <div class="suporte-icon">✉️</div>
         <div class="suporte-title">Email de Suporte</div>
-        <div class="suporte-desc"><span class="__cf_email__" data-cfemail="d3a0a6a3bca1a7b6b0bcbabdbeb2a3bfaa93b4beb2babffdb0bcbe">[email&#160;protected]</span></div>
+        <div class="suporte-desc">suportecoinmaply@gmail.com</div>
         <span class="suporte-link">Enviar Email →</span>
       </a>
       <a href="https://www.instagram.com/coinmaply" target="_blank" class="suporte-card">
@@ -643,7 +663,7 @@
     <a href="https://youtube.com/@CoinMaplyApp" target="_blank" class="social-link">▶️ YouTube</a>
     <a href="https://www.tiktok.com/@coinmaply.app" target="_blank" class="social-link">🎵 TikTok</a>
     <a href="https://k.kwai.com/u/@coinmaplyapp/NCrxMHIO" target="_blank" class="social-link">🎬 Kwai</a>
-    <a href="/cdn-cgi/l/email-protection#a7d4d2d7c8d5d3c2c4c8cec9cac6d7cbdee7c0cac6cecb89c4c8ca" class="social-link">✉️ Email</a>
+    <a href="mailto:suportecoinmaply@gmail.com" class="social-link">✉️ Email</a>
   </div>
 </section>
 
@@ -652,7 +672,7 @@
   <div class="footer-text">
     © 2026 CoinMaply. Todos os direitos reservados.<br/>
     Feito com ❤️ para a comunidade cripto brasileira.<br/>
-    <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="661513160914120305090f080b07160a1f26010b070f0a4805090b">[email&#160;protected]</a>
+    suportecoinmaply@gmail.com
   </div>
 </footer>
 
@@ -679,6 +699,8 @@
     const descricao = document.getElementById('f-descricao').value.trim();
     const email = document.getElementById('f-email').value.trim();
     const email2 = document.getElementById('f-email2').value.trim();
+    const senha = document.getElementById('f-senha').value.trim();
+    const senha2 = document.getElementById('f-senha2').value.trim();
     const criptos = Array.from(document.querySelectorAll('.cripto-item input:checked')).map(c => c.value);
 
     if (!nome) { mostrarErro('Informe o nome do estabelecimento.'); return; }
@@ -689,6 +711,9 @@
     if (!estado) { mostrarErro('Informe o estado (UF).'); return; }
     if (!email) { mostrarErro('Informe o email.'); return; }
     if (email !== email2) { mostrarErro('Os emails não coincidem.'); return; }
+    if (!senha) { mostrarErro('Informe uma senha.'); return; }
+    if (senha.length < 6) { mostrarErro('A senha deve ter no mínimo 6 caracteres.'); return; }
+    if (senha !== senha2) { mostrarErro('As senhas não coincidem.'); return; }
     if (criptos.length === 0) { mostrarErro('Selecione ao menos uma criptomoeda.'); return; }
 
     const btn = document.querySelector('#form-content .btn-primary');
@@ -719,6 +744,7 @@
     };
 
     try {
+      // 1. Salva o estabelecimento
       const res = await fetch(SUPABASE_URL + '/rest/v1/establishments', {
         method: 'POST',
         headers: {
@@ -730,21 +756,51 @@
         body: JSON.stringify(dados)
       });
 
-      if (res.ok || res.status === 201) {
-        document.getElementById('form-content').style.display = 'none';
-        document.getElementById('form-success').style.display = 'block';
-      } else {
+      if (!res.ok && res.status !== 201) {
         const errData = await res.text();
         mostrarErro('Erro ao enviar. Tente novamente ou use o WhatsApp.');
-        console.error('Erro Supabase:', errData);
+        console.error('Erro Supabase establishments:', errData);
         btn.textContent = '🚀 Enviar Cadastro';
         btn.disabled = false;
+        return;
       }
+
+      // 2. Salva o proprietário na tabela owners
+      const owner = {
+        name: nome,
+        email: email,
+        password: senha,
+        phone: telefone || null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      await fetch(SUPABASE_URL + '/rest/v1/owners', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(owner)
+      });
+
+      document.getElementById('form-content').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+
     } catch(e) {
       mostrarErro('Erro de conexão. Verifique sua internet.');
       btn.textContent = '🚀 Enviar Cadastro';
       btn.disabled = false;
     }
+  }
+
+  function toggleSenhaForm(inputId, btnId) {
+    const input = document.getElementById(inputId);
+    const btn = document.getElementById(btnId);
+    if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+    else { input.type = 'password'; btn.textContent = '👁️'; }
   }
 
   function mostrarErro(msg) {

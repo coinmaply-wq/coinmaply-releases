@@ -387,6 +387,17 @@
 
       <div class="form-row">
         <div class="form-group">
+          <label>Nome Completo do Responsável <span>*</span></label>
+          <input type="text" id="f-responsavel" placeholder="Ex: João da Silva"/>
+        </div>
+        <div class="form-group">
+          <label>CPF do Responsável <span>*</span></label>
+          <input type="text" id="f-cpf" placeholder="000.000.000-00" maxlength="14"/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
           <label>Categoria <span>*</span></label>
           <select id="f-categoria"><option value="">Carregando...</option></select>
         </div>
@@ -639,10 +650,10 @@
         <div class="suporte-desc">Atendimento rápido. Resposta em até 24h.</div>
         <span class="suporte-link">Abrir WhatsApp →</span>
       </a>
-      <a href="mailto:suportecoinmaply@gmail.com" class="suporte-card">
+      <a href="/cdn-cgi/l/email-protection#8cfff9fce3fef8e9efe3e5e2e1edfce0f5ccebe1ede5e0a2efe3e1" class="suporte-card">
         <div class="suporte-icon">✉️</div>
         <div class="suporte-title">Email de Suporte</div>
-        <div class="suporte-desc">suportecoinmaply@gmail.com</div>
+        <div class="suporte-desc"><span class="__cf_email__" data-cfemail="a7d4d2d7c8d5d3c2c4c8cec9cac6d7cbdee7c0cac6cecb89c4c8ca">[email&#160;protected]</span></div>
         <span class="suporte-link">Enviar Email →</span>
       </a>
       <a href="https://www.instagram.com/coinmaply" target="_blank" class="suporte-card">
@@ -663,7 +674,7 @@
     <a href="https://youtube.com/@CoinMaplyApp" target="_blank" class="social-link">▶️ YouTube</a>
     <a href="https://www.tiktok.com/@coinmaply.app" target="_blank" class="social-link">🎵 TikTok</a>
     <a href="https://k.kwai.com/u/@coinmaplyapp/NCrxMHIO" target="_blank" class="social-link">🎬 Kwai</a>
-    <a href="mailto:suportecoinmaply@gmail.com" class="social-link">✉️ Email</a>
+    <a href="/cdn-cgi/l/email-protection#a1d2d4d1ced3d5c4c2cec8cfccc0d1cdd8e1c6ccc0c8cd8fc2cecc" class="social-link">✉️ Email</a>
   </div>
 </section>
 
@@ -672,11 +683,11 @@
   <div class="footer-text">
     © 2026 CoinMaply. Todos os direitos reservados.<br/>
     Feito com ❤️ para a comunidade cripto brasileira.<br/>
-    suportecoinmaply@gmail.com
+    <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b4c7c1c4dbc6c0d1d7dbdddad9d5c4d8cdf4d3d9d5ddd89ad7dbd9">[email&#160;protected]</a>
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   function toggleMenu() {
     document.getElementById('mobileMenu').classList.toggle('open');
   }
@@ -701,9 +712,13 @@
     const email2 = document.getElementById('f-email2').value.trim();
     const senha = document.getElementById('f-senha').value.trim();
     const senha2 = document.getElementById('f-senha2').value.trim();
+    const responsavel = document.getElementById('f-responsavel').value.trim();
+    const cpf = document.getElementById('f-cpf').value.trim();
     const criptos = Array.from(document.querySelectorAll('.cripto-item input:checked')).map(c => c.value);
 
     if (!nome) { mostrarErro('Informe o nome do estabelecimento.'); return; }
+    if (!responsavel) { mostrarErro('Informe o nome completo do responsável.'); return; }
+    if (!cpf) { mostrarErro('Informe o CPF do responsável.'); return; }
     if (!categoria) { mostrarErro('Selecione a categoria.'); return; }
     if (!telefone) { mostrarErro('Informe o telefone.'); return; }
     if (!rua) { mostrarErro('Informe a rua/avenida.'); return; }
@@ -767,10 +782,11 @@
 
       // 2. Salva o proprietário na tabela owners
       const owner = {
-        name: nome,
+        name: responsavel,
         email: email,
         password: senha,
         phone: telefone || null,
+        cpf: cpf || null,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
@@ -798,17 +814,4 @@
 
   function toggleSenhaForm(inputId, btnId) {
     const input = document.getElementById(inputId);
-    const btn = document.getElementById(btnId);
-    if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
-    else { input.type = 'password'; btn.textContent = '👁️'; }
-  }
-
-  function mostrarErro(msg) {
-    const e = document.getElementById('form-error');
-    e.textContent = '⚠️ ' + msg;
-    e.style.display = 'block';
-    e.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-</script>
-</body>
-</html>
+    const btn 

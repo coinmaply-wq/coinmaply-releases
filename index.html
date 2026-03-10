@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CoinMaply — O Mapa da Nova Economia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root { --orange:#FF9500; --orange-dark:#e08500; --black:#0a0a0a; --dark:#111111; --card:#1a1a1a; --border:#2a2a2a; --text:#f0f0f0; --muted:#888888; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--black); color:var(--text); font-family:'DM Sans',sans-serif; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+    body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(255,149,0,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,149,0,0.03) 1px,transparent 1px); background-size:60px 60px; pointer-events:none; z-index:0; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:16px 40px; background:rgba(10,10,10,0.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+    .nav-logo { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; color:var(--orange); text-decoration:none; }
+    .nav-links { display:flex; gap:24px; list-style:none; }
+    .nav-links a { color:var(--muted); text-decoration:none; font-size:0.9rem; font-weight:500; transition:color 0.2s; cursor:pointer; }
+    .nav-links a:hover { color:var(--orange); }
+    .nav-links a.destaque { color:var(--orange); font-weight:700; }
+    .nav-menu-btn { display:none; background:none; border:none; color:var(--orange); font-size:1.8rem; cursor:pointer; }
+    .mobile-menu { display:none; position:fixed; top:57px; left:0; right:0; background:rgba(10,10,10,0.98); border-bottom:1px solid var(--border); padding:20px; z-index:99; flex-direction:column; gap:4px; }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a { color:var(--text); text-decoration:none; font-size:1rem; font-weight:500; padding:12px 0; border-bottom:1px solid var(--border); cursor:pointer; display:block; }
+    .hero { position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:120px 20px 80px; z-index:1; }
+    .hero-glow { position:absolute; top:20%; left:50%; transform:translateX(-50%); width:600px; height:600px; background:radial-gradient(circle,rgba(255,149,0,0.12) 0%,transparent 70%); pointer-events:none; }
+    .hero-badge { display:inline-block; background:rgba(255,149,0,0.1); border:1px solid rgba(255,149,0,0.3); color:var(--orange); padding:6px 16px; border-radius:100px; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:24px; }
+    .hero h1 { font-family:'Syne',sans-serif; font-size:clamp(2.4rem,7vw,5.5rem); font-weight:800; line-height:1.05; margin-bottom:24px; }
+    .hero h1 span { color:var(--orange); }
+    .hero p { font-size:clamp(1rem,2.5vw,1.2rem); color:var(--muted); max-width:560px; margin:0 auto 40px; line-height:1.7; }
+    .hero-buttons { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+    .btn-primary { display:inline-flex; align-items:center; justify-content:center; gap:10px; background:var(--orange); color:#000; font-weight:700; font-size:1rem; padding:16px 32px; border-radius:12px; text-decoration:none; transition:all 0.2s; box-shadow:0 0 30px rgba(255,149,0,0.3); border:none; cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .btn-primary:hover { background:var(--orange-dark); transform:translateY(-2px); box-shadow:0 0 40px rgba(255,149,0,0.5); }
+    .btn-secondary { display:inline-flex; align-items:center; justify-content:center; gap:10px; background:transparent; color:var(--text); font-weight:600; font-size:1rem; padding:16px 32px; border-radius:12px; text-decoration:none; border:1px solid var(--border); transition:all 0.2s; cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .btn-secondary:hover { border-color:var(--orange); color:var(--orange); }
+    .stats { position:relative; z-index:1; display:flex; justify-content:center; gap:40px; flex-wrap:wrap; padding:60px 20px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:rgba(255,149,0,0.02); }
+    .stat { text-align:center; }
+    .stat-num { font-family:'Syne',sans-serif; font-size:2.5rem; font-weight:800; color:var(--orange); }
+    .stat-label { color:var(--muted); font-size:0.9rem; margin-top:4px; }
+    .section { position:relative; z-index:1; padding:80px 20px; max-width:1100px; margin:0 auto; }
+    .section-label { color:var(--orange); font-size:0.8rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; }
+    .section-title { font-family:'Syne',sans-serif; font-size:clamp(1.6rem,4vw,3rem); font-weight:800; line-height:1.2; margin-bottom:16px; }
+    .section-title span { color:var(--orange); }
+    .section-sub { color:var(--muted); font-size:1rem; max-width:500px; line-height:1.7; margin-bottom:50px; }
+    .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+    .feature-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px; transition:all 0.3s; }
+    .feature-card:hover { border-color:rgba(255,149,0,0.4); transform:translateY(-4px); box-shadow:0 20px 40px rgba(0,0,0,0.3); }
+    .feature-icon { font-size:2rem; margin-bottom:14px; }
+    .feature-title { font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700; margin-bottom:8px; }
+    .feature-desc { color:var(--muted); font-size:0.92rem; line-height:1.6; }
+    .download-section { position:relative; z-index:1; background:linear-gradient(135deg,rgba(255,149,0,0.08),rgba(255,149,0,0.02)); border-top:1px solid rgba(255,149,0,0.2); border-bottom:1px solid rgba(255,149,0,0.2); padding:80px 20px; text-align:center; }
+    .download-section h2 { font-family:'Syne',sans-serif; font-size:clamp(1.8rem,4vw,3.2rem); font-weight:800; margin-bottom:16px; }
+    .download-section p { color:var(--muted); font-size:1.05rem; margin-bottom:36px; max-width:500px; margin-left:auto; margin-right:auto; }
+    .version-info { color:var(--muted); font-size:0.85rem; margin-top:16px; }
+    .form-section { position:relative; z-index:1; padding:80px 20px; max-width:800px; margin:0 auto; }
+    .form-card { background:var(--card); border:1px solid rgba(255,149,0,0.3); border-radius:20px; padding:48px 40px; }
+    .form-group { margin-bottom:20px; }
+    .form-group label { display:block; font-size:0.9rem; font-weight:600; color:var(--text); margin-bottom:8px; }
+    .form-group label span.req { color:var(--orange); }
+    .form-group input,.form-group select,.form-group textarea { width:100%; background:#111; border:1px solid var(--border); border-radius:10px; padding:14px 16px; color:var(--text); font-size:0.95rem; font-family:'DM Sans',sans-serif; transition:border-color 0.2s; -webkit-appearance:none; }
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus { outline:none; border-color:var(--orange); }
+    .form-group textarea { resize:vertical; min-height:100px; }
+    .form-group select option { background:#111; }
+    .cripto-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-top:8px; }
+    .cripto-item { display:flex; align-items:center; gap:8px; background:#111; border:1px solid var(--border); border-radius:8px; padding:10px 12px; cursor:pointer; transition:all 0.2s; font-size:0.88rem; }
+    .cripto-item input[type=checkbox] { width:16px; height:16px; accent-color:var(--orange); margin:0; padding:0; }
+    .cripto-item:has(input:checked) { border-color:var(--orange); background:rgba(255,149,0,0.08); }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .form-divider { border:none; border-top:1px solid var(--border); margin:28px 0; }
+    .form-title { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:var(--orange); margin-bottom:20px; }
+    .form-aviso { background:rgba(255,149,0,0.06); border:1px solid rgba(255,149,0,0.2); border-radius:10px; padding:14px 18px; font-size:0.88rem; color:var(--muted); margin-bottom:24px; line-height:1.6; }
+    #form-success { display:none; text-align:center; padding:40px 20px; }
+    #form-success .success-icon { font-size:4rem; margin-bottom:16px; }
+    #form-success h3 { font-family:'Syne',sans-serif; font-size:1.6rem; color:var(--orange); margin-bottom:12px; }
+    #form-success p { color:var(--muted); line-height:1.6; }
+    .suporte-section { position:relative; z-index:1; background:rgba(255,149,0,0.02); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:80px 20px; }
+    .suporte-inner { max-width:900px; margin:0 auto; text-align:center; }
+    .suporte-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; margin-top:50px; }
+    .suporte-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px; text-align:center; transition:all 0.3s; text-decoration:none; color:var(--text); display:block; }
+    .suporte-card:hover { border-color:var(--orange); transform:translateY(-4px); }
+    .suporte-icon { font-size:2.2rem; margin-bottom:12px; }
+    .suporte-title { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; margin-bottom:6px; }
+    .suporte-desc { color:var(--muted); font-size:0.88rem; line-height:1.5; }
+    .suporte-link { color:var(--orange); font-size:0.85rem; font-weight:600; margin-top:10px; display:block; }
+    .social-section { position:relative; z-index:1; padding:80px 20px; text-align:center; max-width:800px; margin:0 auto; }
+    .social-title { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; margin-bottom:40px; }
+    .social-links { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+    .social-link { display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid var(--border); color:var(--text); text-decoration:none; padding:14px 24px; border-radius:12px; font-weight:600; font-size:0.92rem; transition:all 0.2s; }
+    .social-link:hover { border-color:var(--orange); color:var(--orange); transform:translateY(-2px); }
+    footer { position:relative; z-index:1; border-top:1px solid var(--border); padding:40px 20px; text-align:center; }
+    .footer-logo { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; color:var(--orange); margin-bottom:12px; }
+    .footer-text { color:var(--muted); font-size:0.85rem; line-height:1.8; }
+
+    /* ===== AREA DO PROPRIETARIO ===== */
+    .owner-section { position:relative; z-index:1; padding:80px 20px; max-width:860px; margin:0 auto; }
+    .owner-card { background:var(--card); border:1px solid rgba(255,149,0,0.35); border-radius:20px; padding:48px 40px; }
+    .owner-tabs { display:flex; gap:4px; margin-bottom:32px; border-bottom:1px solid var(--border); }
+    .owner-tab { background:none; border:none; border-bottom:2px solid transparent; color:var(--muted); font-size:0.9rem; font-weight:600; padding:10px 20px; cursor:pointer; font-family:'DM Sans',sans-serif; margin-bottom:-1px; transition:all 0.2s; }
+    .owner-tab.active { color:var(--orange); border-bottom-color:var(--orange); }
+    .owner-tab:hover:not(.active) { color:var(--text); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+    /* Status */
+    .status-badge { display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:20px; font-size:0.78rem; font-weight:700; }
+    .s-active { background:rgba(37,211,102,0.12); color:#25d366; border:1px solid rgba(37,211,102,0.3); }
+    .s-pending { background:rgba(255,200,0,0.12); color:#ffc800; border:1px solid rgba(255,200,0,0.3); }
+    .s-blocked { background:rgba(255,107,107,0.12); color:#ff6b6b; border:1px solid rgba(255,107,107,0.3); }
+    /* Painel botoes */
+    .panel-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-top:20px; }
+    .panel-btn { background:#111; border:1px solid var(--border); border-radius:14px; padding:20px 16px; cursor:pointer; text-align:left; color:var(--text); font-family:'DM Sans',sans-serif; transition:all 0.3s; width:100%; }
+    .panel-btn:hover { border-color:var(--orange); transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,0.3); }
+    .panel-btn .p-icon { font-size:1.8rem; margin-bottom:10px; }
+    .panel-btn .p-label { font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; margin-bottom:4px; }
+    .panel-btn .p-desc { color:var(--muted); font-size:0.75rem; }
+    /* Subpanel */
+    .subpanel { display:none; }
+    .subpanel.open { display:block; }
+    .back-btn { background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.85rem; font-family:'DM Sans',sans-serif; display:flex; align-items:center; gap:6px; padding:0; margin-bottom:20px; }
+    .back-btn:hover { color:var(--orange); }
+    .subpanel-title { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; color:var(--orange); margin-bottom:20px; }
+    /* Avisos */
+    .aviso-item { background:#111; border:1px solid var(--border); border-left:4px solid var(--orange); border-radius:10px; padding:16px 20px; margin-bottom:12px; }
+    .aviso-item .av-title { font-weight:700; margin-bottom:6px; }
+    .aviso-item .av-msg { color:var(--muted); font-size:0.88rem; line-height:1.6; }
+    .aviso-item .av-date { color:var(--orange); font-size:0.75rem; font-weight:600; margin-top:8px; }
+    /* Planos */
+    .planos-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:16px; }
+    .plano-box { background:#111; border:1px solid var(--border); border-radius:12px; padding:20px 14px; text-align:center; transition:all 0.2s; }
+    .plano-box.atual { border-color:var(--orange); background:rgba(255,149,0,0.06); }
+    .plano-box .pl-nome { font-family:'Syne',sans-serif; font-weight:800; font-size:0.95rem; margin-bottom:6px; }
+    .plano-box .pl-preco { color:var(--orange); font-size:1.2rem; font-weight:700; margin-bottom:8px; }
+    .plano-box .pl-info { color:var(--muted); font-size:0.75rem; line-height:1.5; }
+    /* Criptos panel */
+    .cripto-panel { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-top:12px; }
+    .cripto-panel label { display:flex; align-items:center; gap:8px; background:#111; border:1px solid var(--border); border-radius:8px; padding:10px 12px; cursor:pointer; font-size:0.85rem; transition:all 0.2s; }
+    .cripto-panel label:has(input:checked) { border-color:var(--orange); background:rgba(255,149,0,0.08); }
+    .cripto-panel input[type=checkbox] { width:15px; height:15px; accent-color:var(--orange); margin:0; }
+    /* Fotos */
+    .fotos-wrap { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; margin-top:16px; }
+    .foto-box { aspect-ratio:1; border-radius:10px; overflow:hidden; position:relative; background:#111; border:1px solid var(--border); }
+    .foto-box img { width:100%; height:100%; object-fit:cover; display:block; }
+    .foto-del { position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.75); border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; color:#fff; font-size:11px; display:flex; align-items:center; justify-content:center; }
+    .foto-add-btn { aspect-ratio:1; border-radius:10px; border:2px dashed var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; color:var(--muted); font-size:0.78rem; gap:6px; background:#111; transition:all 0.2s; }
+    .foto-add-btn:hover { border-color:var(--orange); color:var(--orange); }
+    /* Pagamento */
+    .pag-box { background:#111; border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; }
+    .pag-label { font-weight:700; margin-bottom:8px; }
+    .pag-key { font-family:monospace; font-size:0.85rem; color:var(--orange); word-break:break-all; margin:8px 0; }
+    .copy-btn { background:rgba(255,149,0,0.1); border:1px solid rgba(255,149,0,0.3); color:var(--orange); border-radius:8px; padding:7px 14px; cursor:pointer; font-size:0.8rem; font-weight:600; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
+    .copy-btn:hover { background:rgba(255,149,0,0.2); }
+    /* Senha recovery steps */
+    .steps-bar { display:flex; gap:8px; margin-bottom:24px; }
+    .step-line { flex:1; height:4px; border-radius:4px; background:var(--border); transition:background 0.3s; }
+    .step-line.done { background:var(--orange); }
+    .sec-q-btn { width:100%; background:#111; border:1px solid var(--border); border-radius:10px; padding:13px 16px; color:var(--text); text-align:left; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.9rem; margin-bottom:8px; transition:all 0.2s; }
+    .sec-q-btn.sel { border-color:var(--orange); background:rgba(255,149,0,0.08); color:var(--orange); }
+    /* Admin avisos compose */
+    .admin-msg-area { width:100%; background:#111; border:1px solid var(--border); border-radius:10px; padding:14px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.9rem; resize:vertical; min-height:90px; }
+    .admin-msg-area:focus { outline:none; border-color:var(--orange); }
+    .msg-enviada { background:rgba(37,211,102,0.08); border:1px solid rgba(37,211,102,0.25); border-radius:10px; padding:14px; margin-bottom:10px; }
+    .msg-enviada .me-titulo { font-weight:700; margin-bottom:4px; font-size:0.9rem; }
+    .msg-enviada .me-texto { color:var(--muted); font-size:0.85rem; line-height:1.5; }
+    .msg-enviada .me-data { color:var(--muted); font-size:0.72rem; margin-top:6px; }
+
+    @media(max-width:768px){
+      nav { padding:14px 20px; }
+      .nav-links { display:none; }
+      .nav-menu-btn { display:block; }
+      .hero { padding:100px 16px 60px; }
+      .form-card,.owner-card { padding:28px 16px; }
+      .form-row { grid-template-columns:1fr; }
+      .cripto-grid { grid-template-columns:repeat(2,1fr); }
+      .stats { gap:24px; padding:40px 16px; }
+      .section { padding:60px 16px; }
+      .btn-primary,.btn-secondary { width:100%; }
+      .hero-buttons { flex-direction:column; align-items:stretch; padding:0 20px; }
+      .panel-grid { grid-template-columns:repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">🪙 CoinMaply</a>
+  <ul class="nav-links">
+    <li><a href="#features">Recursos</a></li>
+    <li><a onclick="abrirCadastro()" href="#cadastro-form">Cadastre-se</a></li>
+    <li><a href="#estabelecimentos">Estabelecimentos</a></li>
+    <li><a href="#download">Download</a></li>
+    <li><a href="#suporte">Suporte</a></li>
+    <li><a onclick="abrirProprietario()" href="#area-proprietario" class="destaque">🏪 Meu Acesso</a></li>
+  </ul>
+  <button class="nav-menu-btn" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features" onclick="toggleMenu()">Recursos</a>
+  <a onclick="toggleMenu();abrirCadastro()" href="#cadastro-form">Cadastrar meu Negócio</a>
+  <a href="#estabelecimentos" onclick="toggleMenu()">Estabelecimentos</a>
+  <a href="#download" onclick="toggleMenu()">Download</a>
+  <a href="#suporte" onclick="toggleMenu()">Suporte</a>
+  <a onclick="toggleMenu();abrirProprietario()" href="#area-proprietario" style="color:var(--orange)">🏪 Meu Acesso</a>
+</div>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div>
+    <div class="hero-badge">⚡ Versão Beta disponível</div>
+    <h1>O mapa da<br/><span>nova economia</span></h1>
+    <p>Encontre e cadastre estabelecimentos que aceitam Bitcoin e criptomoedas perto de você. Grátis para sempre.</p>
+    <div class="hero-buttons">
+      <a href="https://github.com/coinmaply-wq/coinmaply-releases/releases/download/v9.0/CoinMaply_v9.apk" class="btn-primary">📲 Baixar para Android</a>
+      <button onclick="abrirCadastro()" class="btn-secondary">🏪 Cadastrar meu Negócio</button>
+    </div>
+    <p style="color:var(--muted);font-size:0.8rem;margin-top:16px;">🍎 iPhone — Em breve na App Store</p>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num">59+</div><div class="stat-label">Estabelecimentos cadastrados</div></div>
+  <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Criptomoedas aceitas</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratuito para cadastrar</div></div>
+  <div class="stat"><div class="stat-num">45</div><div class="stat-label">Dias de trial grátis</div></div>
+</div>
+
+<section class="section" id="features">
+  <div class="section-label">Recursos</div>
+  <h2 class="section-title">Tudo que você precisa<br/><span>em um só app</span></h2>
+  <p class="section-sub">O CoinMaply conecta clientes que usam cripto com negócios que aceitam.</p>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">🔍</div><div class="feature-title">Busca Inteligente</div><div class="feature-desc">Filtre por categoria, criptomoeda aceita e distância.</div></div>
+    <div class="feature-card"><div class="feature-icon">🏪</div><div class="feature-title">Cadastro Gratuito</div><div class="feature-desc">Cadastre seu negócio grátis com 45 dias de trial completo.</div></div>
+    <div class="feature-card"><div class="feature-icon">💰</div><div class="feature-title">10+ Criptomoedas</div><div class="feature-desc">Bitcoin, Ethereum, USDT, USDC, BNB, XRP, Solana e muito mais.</div></div>
+    <div class="feature-card"><div class="feature-icon">⭐</div><div class="feature-title">Avaliações</div><div class="feature-desc">Avalie e leia reviews de outros usuários sobre os estabelecimentos.</div></div>
+    <div class="feature-card"><div class="feature-icon">📍</div><div class="feature-title">Como Chegar</div><div class="feature-desc">Integração com Google Maps para traçar rotas com um toque.</div></div>
+    <div class="feature-card"><div class="feature-icon">🏪</div><div class="feature-title">Área do Proprietário</div><div class="feature-desc">Gerencie seu estabelecimento, fotos, criptos e plano direto pelo site.</div></div>
+  </div>
+</section>
+
+<!-- CADASTRO CTA -->
+<section style="position:relative;z-index:1;padding:80px 20px;text-align:center;background:linear-gradient(135deg,rgba(255,149,0,0.06),rgba(255,149,0,0.01));border-top:1px solid rgba(255,149,0,0.15);border-bottom:1px solid rgba(255,149,0,0.15);">
+  <div style="max-width:600px;margin:0 auto;">
+    <div class="section-label" style="text-align:center;">Para Donos de Negócio</div>
+    <h2 class="section-title" style="text-align:center;">Quer colocar seu negócio<br/><span>no mapa?</span></h2>
+    <p style="color:var(--muted);font-size:1.05rem;line-height:1.8;margin-bottom:40px;">Milhares de clientes usam cripto e não sabem onde gastar. O CoinMaply coloca o seu negócio na frente deles.</p>
+    <button onclick="abrirCadastro()" class="btn-primary" style="font-size:1rem;">📋 Preencher Formulário de Cadastro</button>
+  </div>
+</section>
+
+<!-- FORMULÁRIO DE CADASTRO -->
+<section class="form-section" id="cadastro-form" style="display:none;">
+  <div class="section-label" style="text-align:center;">Cadastro Online</div>
+  <h2 class="section-title" style="text-align:center;">Cadastre seu<br/><span>estabelecimento</span></h2>
+  <p class="section-sub" style="text-align:center;max-width:100%;margin-bottom:40px;">Preencha o formulário. Em até 24 horas analisamos e cadastramos seu negócio no mapa!</p>
+  <div class="form-card">
+    <div id="form-content">
+      <div class="form-aviso">📋 Após enviar você receberá confirmação por email. Em até <strong style="color:var(--orange)">24 horas</strong> sua empresa estará no mapa!</div>
+      <div class="form-title">🏪 Dados do Estabelecimento</div>
+      <div class="form-row">
+        <div class="form-group"><label>Nome do Estabelecimento <span class="req">*</span></label><input type="text" id="f-nome" placeholder="Ex: Pizzaria do João"/></div>
+        <div class="form-group"><label>CNPJ <span style="color:var(--muted);font-size:0.8rem;">(apenas registro)</span></label><input type="text" id="f-cnpj-num" placeholder="00.000.000/0000-00"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Nome Completo do Responsável <span class="req">*</span></label><input type="text" id="f-responsavel" placeholder="Ex: João da Silva"/></div>
+        <div class="form-group"><label>CPF do Responsável <span class="req">*</span></label><input type="text" id="f-cpf" placeholder="000.000.000-00" maxlength="14"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Categoria <span class="req">*</span></label><select id="f-categoria"><option value="">Carregando...</option></select></div>
+        <div class="form-group"><label>Telefone <span class="req">*</span></label><input type="tel" id="f-telefone" placeholder="(48) 99999-9999"/></div>
+      </div>
+      <div class="form-group"><label>WhatsApp</label><input type="tel" id="f-whatsapp" placeholder="(48) 99999-9999"/></div>
+      <div class="form-title" style="margin-top:8px;">📍 Endereço</div>
+      <div class="form-row">
+        <div class="form-group"><label>Rua/Av <span class="req">*</span></label><input type="text" id="f-rua" placeholder="Ex: Rua Faria Lima"/></div>
+        <div class="form-group"><label>Número</label><input type="text" id="f-numero" placeholder="Ex: 450"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Bairro</label><input type="text" id="f-bairro" placeholder="Ex: Centro"/></div>
+        <div class="form-group"><label>CEP</label><input type="text" id="f-cep" placeholder="00000-000"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Cidade <span class="req">*</span></label><input type="text" id="f-cidade" placeholder="Ex: São Paulo"/></div>
+        <div class="form-group"><label>Estado <span class="req">*</span></label><input type="text" id="f-estado" placeholder="SP" maxlength="2" style="text-transform:uppercase;"/></div>
+      </div>
+      <div class="form-group"><label>Descrição</label><textarea id="f-descricao" placeholder="Descreva seu estabelecimento..."></textarea></div>
+      <hr class="form-divider"/>
+      <div class="form-title">🔐 Pergunta de Segurança</div>
+      <div class="form-aviso">🔑 Usada para recuperar sua senha caso esqueça. Escolha uma e responda com cuidado.</div>
+      <div class="form-group">
+        <label>Pergunta <span class="req">*</span></label>
+        <select id="f-sec-question">
+          <option value="">Selecione...</option>
+          <option value="0">Nome do seu primeiro carro?</option>
+          <option value="1">Os últimos 4 números do seu CPF?</option>
+          <option value="2">Os 3 primeiros números do seu RG?</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Sua Resposta <span class="req">*</span></label><input type="text" id="f-sec-answer" placeholder="Digite sua resposta..."/></div>
+      <hr class="form-divider"/>
+      <div class="form-title">📧 Dados de Acesso</div>
+      <div class="form-aviso">📱 Use este email e senha para acessar a <strong style="color:var(--orange)">Área do Proprietário</strong> neste site e gerenciar seu estabelecimento.</div>
+      <div class="form-row">
+        <div class="form-group"><label>Email <span class="req">*</span></label><input type="email" id="f-email" placeholder="seu@email.com"/></div>
+        <div class="form-group"><label>Confirmar Email <span class="req">*</span></label><input type="email" id="f-email2" placeholder="seu@email.com"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Senha <span class="req">*</span></label>
+          <div style="position:relative;"><input type="password" id="f-senha" placeholder="Mínimo 6 caracteres" style="width:100%;padding-right:44px;"/>
+          <button type="button" onclick="togglePwd('f-senha','bi1')" id="bi1" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);">👁️</button></div>
+        </div>
+        <div class="form-group"><label>Confirmar Senha <span class="req">*</span></label>
+          <div style="position:relative;"><input type="password" id="f-senha2" placeholder="Repita a senha" style="width:100%;padding-right:44px;"/>
+          <button type="button" onclick="togglePwd('f-senha2','bi2')" id="bi2" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);">👁️</button></div>
+        </div>
+      </div>
+      <hr class="form-divider"/>
+      <div class="form-title">💰 Criptomoedas Aceitas <span style="color:var(--orange)">*</span></div>
+      <div class="cripto-grid">
+        <label class="cripto-item"><input type="checkbox" value="Bitcoin (BTC)"/> Bitcoin (BTC)</label>
+        <label class="cripto-item"><input type="checkbox" value="Ethereum (ETH)"/> Ethereum (ETH)</label>
+        <label class="cripto-item"><input type="checkbox" value="USDT"/> USDT</label>
+        <label class="cripto-item"><input type="checkbox" value="USDC"/> USDC</label>
+        <label class="cripto-item"><input type="checkbox" value="BNB"/> BNB</label>
+        <label class="cripto-item"><input type="checkbox" value="XRP"/> XRP</label>
+        <label class="cripto-item"><input type="checkbox" value="Solana (SOL)"/> Solana (SOL)</label>
+        <label class="cripto-item"><input type="checkbox" value="Litecoin (LTC)"/> Litecoin (LTC)</label>
+        <label class="cripto-item"><input type="checkbox" value="Dogecoin"/> Dogecoin</label>
+        <label class="cripto-item"><input type="checkbox" value="Polygon"/> Polygon</label>
+        <label class="cripto-item"><input type="checkbox" value="PIX Cripto"/> PIX Cripto</label>
+        <label class="cripto-item"><input type="checkbox" value="Outra"/> Outra</label>
+      </div>
+      <div id="form-error" style="display:none;color:#ff6b6b;font-size:0.88rem;margin:16px 0;padding:12px;background:rgba(255,107,107,0.1);border-radius:8px;"></div>
+      <button class="btn-primary" onclick="enviarFormulario()" style="width:100%;font-size:1rem;padding:16px;margin-top:16px;">🚀 Enviar Cadastro</button>
+    </div>
+    <div id="form-success">
+      <div class="success-icon">✅</div>
+      <h3>Cadastro enviado!</h3>
+      <p>Recebemos seus dados! Em até <strong>24 horas</strong> sua empresa estará no mapa.<br/><br/>Use o email e senha cadastrados para acessar a <strong style="color:var(--orange)">Área do Proprietário</strong> neste site.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ESTABELECIMENTOS -->
+<section style="position:relative;z-index:1;padding:80px 20px;background:rgba(255,149,0,0.02);border-top:1px solid var(--border);" id="estabelecimentos">
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="section-label" style="text-align:center;">Estabelecimentos</div>
+    <h2 class="section-title" style="text-align:center;">Encontre onde<br/><span>gastar suas criptos</span></h2>
+    <p style="color:var(--muted);text-align:center;font-size:1rem;line-height:1.7;margin-bottom:40px;">Veja todos os estabelecimentos cadastrados no CoinMaply.</p>
+    <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;">
+      <input type="text" id="busca-nome" placeholder="🔍 Buscar por nome ou cidade..." oninput="filtrarEstabelecimentos()"
+        style="flex:1;min-width:200px;background:#111;border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:var(--text);font-size:0.95rem;font-family:'DM Sans',sans-serif;"/>
+      <select id="busca-categoria" onchange="filtrarEstabelecimentos()"
+        style="background:#111;border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:var(--text);font-size:0.95rem;font-family:'DM Sans',sans-serif;">
+        <option value="">Todas as categorias</option>
+      </select>
+    </div>
+    <div id="lista-estabelecimentos" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+      <div style="text-align:center;padding:40px;color:var(--muted);grid-column:1/-1;">⏳ Carregando...</div>
+    </div>
+    <div id="lista-vazia" style="display:none;text-align:center;padding:40px;color:var(--muted);">Nenhum estabelecimento encontrado.</div>
+  </div>
+</section>
+
+<!-- AREA DO PROPRIETARIO -->
+<section class="owner-section" id="area-proprietario" style="display:none;">
+  <div class="section-label" style="text-align:center;">Para Proprietários</div>
+  <h2 class="section-title" style="text-align:center;">Área do<br/><span>Proprietário</span></h2>
+  <div class="owner-card">
+    <!-- TABS -->
+    <div class="owner-tabs">
+      <button class="owner-tab active" onclick="switchTab('tab-login')">🔑 Login</button>
+      <button class="owner-tab" onclick="switchTab('tab-recuperar')">🔐 Esqueci a Senha</button>
+    </div>
+
+    <!-- TAB LOGIN -->
+    <div class="tab-panel active" id="tab-login">
+      <!-- Estado: não logado -->
+      <div id="login-form">
+        <div class="form-group"><label>Email</label>
+          <input type="email" id="ow-email" placeholder="seu@email.com"/>
+        </div>
+        <div class="form-group"><label>Senha</label>
+          <div style="position:relative;">
+            <input type="password" id="ow-senha" placeholder="••••••" style="width:100%;padding-right:44px;" onkeydown="if(event.key==='Enter')fazerLogin()"/>
+            <button type="button" onclick="togglePwd('ow-senha','ow-eye')" id="ow-eye" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);">👁️</button>
+          </div>
+        </div>
+        <div id="login-error" style="display:none;color:#ff6b6b;font-size:0.85rem;margin-bottom:14px;padding:10px 14px;background:rgba(255,107,107,0.1);border-radius:8px;"></div>
+        <button class="btn-primary" onclick="fazerLogin()" style="width:100%;" id="btn-login">🔓 Entrar</button>
+        <p style="text-align:center;margin-top:16px;font-size:0.88rem;color:var(--muted);">
+          Não tem cadastro? <a onclick="abrirCadastro()" href="#cadastro-form" style="color:var(--orange);font-weight:600;">Cadastre seu negócio →</a>
+        </p>
+      </div>
+      <!-- Estado: logado -->
+      <div id="painel-logado" style="display:none;">
+        <!-- Info do proprietário -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;padding:16px 20px;background:#111;border-radius:12px;border:1px solid var(--border);">
+          <div>
+            <div style="font-weight:700;font-size:1rem;" id="ow-nome-display">—</div>
+            <div style="color:var(--muted);font-size:0.82rem;" id="ow-email-display">—</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span id="ow-status-badge" class="status-badge s-pending">⏳ Pendente</span>
+            <button onclick="fazerLogout()" style="background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);color:#ff6b6b;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:0.82rem;font-family:'DM Sans',sans-serif;">🚪 Sair</button>
+          </div>
+        </div>
+        <!-- Menu painel -->
+        <div id="menu-painel">
+          <div class="panel-grid">
+            <button class="panel-btn" onclick="abrirSub('sub-dados')"><div class="p-icon">✏️</div><div class="p-label">Editar Dados</div><div class="p-desc">Nome, endereço, contato</div></button>
+            <button class="panel-btn" onclick="abrirSub('sub-criptos')"><div class="p-icon">💰</div><div class="p-label">Criptomoedas</div><div class="p-desc">Quais moedas aceita</div></button>
+            <button class="panel-btn" onclick="abrirSub('sub-fotos')"><div class="p-icon">📸</div><div class="p-label">Fotos</div><div class="p-desc">Gerenciar imagens</div></button>
+            <button class="panel-btn" onclick="abrirSub('sub-plano')"><div class="p-icon">💎</div><div class="p-label">Plano</div><div class="p-desc">Ver e alterar plano</div></button>
+            <button class="panel-btn" onclick="abrirSub('sub-pagamento')"><div class="p-icon">💳</div><div class="p-label">Pagamento</div><div class="p-desc">PIX, ERC20, TRC20</div></button>
+            <button class="panel-btn" onclick="abrirSub('sub-avisos')"><div class="p-icon">🔔</div><div class="p-label">Avisos</div><div class="p-desc">Mensagens do CoinMaply</div></button>
+          </div>
+        </div>
+
+        <!-- SUB: Editar Dados -->
+        <div class="subpanel" id="sub-dados">
+          <button class="back-btn" onclick="fecharSub('sub-dados')">← Voltar ao painel</button>
+          <div class="subpanel-title">✏️ Editar Dados</div>
+          <div class="form-group"><label>Nome do Estabelecimento</label><input type="text" id="ed-nome" placeholder="Nome"/></div>
+          <div class="form-row">
+            <div class="form-group"><label>Telefone</label><input type="text" id="ed-telefone" placeholder="(48) 99999-9999"/></div>
+            <div class="form-group"><label>WhatsApp</label><input type="text" id="ed-whatsapp" placeholder="(48) 99999-9999"/></div>
+          </div>
+          <div class="form-group"><label>Endereço Completo</label><input type="text" id="ed-address" placeholder="Ex: Rua Faria Lima, 450 — Centro, São Paulo - SP"/></div>
+          <div class="form-row">
+            <div class="form-group"><label>Cidade</label><input type="text" id="ed-cidade" placeholder="Cidade"/></div>
+            <div class="form-group"><label>Estado</label><input type="text" id="ed-estado" placeholder="SC" maxlength="2" style="text-transform:uppercase;"/></div>
+          </div>
+          <div class="form-group"><label>Descrição</label><textarea id="ed-descricao" placeholder="Descreva seu negócio..."></textarea></div>
+          <div id="ed-msg" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:8px;font-size:0.85rem;"></div>
+          <button class="btn-primary" onclick="salvarDados()" style="width:100%;">💾 Salvar Alterações</button>
+        </div>
+
+        <!-- SUB: Criptomoedas -->
+        <div class="subpanel" id="sub-criptos">
+          <button class="back-btn" onclick="fecharSub('sub-criptos')">← Voltar ao painel</button>
+          <div class="subpanel-title">💰 Criptomoedas Aceitas</div>
+          <div class="cripto-panel" id="cripto-panel-list">
+            <label><input type="checkbox" value="Bitcoin (BTC)"/> Bitcoin (BTC)</label>
+            <label><input type="checkbox" value="Ethereum (ETH)"/> Ethereum (ETH)</label>
+            <label><input type="checkbox" value="USDT"/> USDT</label>
+            <label><input type="checkbox" value="USDC"/> USDC</label>
+            <label><input type="checkbox" value="BNB"/> BNB</label>
+            <label><input type="checkbox" value="XRP"/> XRP</label>
+            <label><input type="checkbox" value="Solana (SOL)"/> Solana (SOL)</label>
+            <label><input type="checkbox" value="Litecoin (LTC)"/> Litecoin (LTC)</label>
+            <label><input type="checkbox" value="Dogecoin"/> Dogecoin</label>
+            <label><input type="checkbox" value="Polygon"/> Polygon</label>
+            <label><input type="checkbox" value="PIX Cripto"/> PIX Cripto</label>
+            <label><input type="checkbox" value="Outra"/> Outra</label>
+          </div>
+          <div id="cripto-msg" style="display:none;margin:12px 0;padding:10px 14px;border-radius:8px;font-size:0.85rem;"></div>
+          <button class="btn-primary" onclick="salvarCriptos()" style="width:100%;margin-top:20px;">💾 Salvar Criptomoedas</button>
+        </div>
+
+        <!-- SUB: Fotos -->
+        <div class="subpanel" id="sub-fotos">
+          <button class="back-btn" onclick="fecharSub('sub-fotos')">← Voltar ao painel</button>
+          <div class="subpanel-title">📸 Gerenciar Fotos</div>
+          <div id="fotos-limite" style="color:var(--muted);font-size:0.85rem;margin-bottom:16px;"></div>
+          <div class="fotos-wrap" id="fotos-grid"></div>
+          <div id="fotos-msg" style="display:none;margin-top:12px;padding:10px 14px;border-radius:8px;font-size:0.85rem;"></div>
+          <input type="file" id="foto-input" accept="image/*" style="display:none;" onchange="uploadFoto(this)"/>
+        </div>
+
+        <!-- SUB: Plano -->
+        <div class="subpanel" id="sub-plano">
+          <button class="back-btn" onclick="fecharSub('sub-plano')">← Voltar ao painel</button>
+          <div class="subpanel-title">💎 Plano Atual</div>
+          <div id="plano-atual-info" style="color:var(--muted);font-size:0.88rem;margin-bottom:20px;"></div>
+          <div class="planos-grid">
+            <div class="plano-box" id="plano-basico"><div class="pl-nome">Básico</div><div class="pl-preco">R$10/mês</div><div class="pl-info">0 fotos<br/>Trial 45 dias</div></div>
+            <div class="plano-box" id="plano-pro"><div class="pl-nome">Pro</div><div class="pl-preco">R$50/mês</div><div class="pl-info">2 fotos<br/>Destaque na busca</div></div>
+            <div class="plano-box" id="plano-premium"><div class="pl-nome">Premium</div><div class="pl-preco">R$100/mês</div><div class="pl-info">4 fotos<br/>Destaque premium</div></div>
+            <div class="plano-box" id="plano-enterprise"><div class="pl-nome">Enterprise</div><div class="pl-preco">R$200/mês</div><div class="pl-info">8 fotos<br/>Suporte prioritário</div></div>
+          </div>
+          <p style="color:var(--muted);font-size:0.82rem;margin-top:20px;line-height:1.6;">Para alterar seu plano, entre em contato via <a href="https://wa.me/554896437522" target="_blank" style="color:var(--orange)">WhatsApp</a> ou <a href="/cdn-cgi/l/email-protection#681b1d18071a1c0d0b0701060509180411280f05090104460b0705" style="color:var(--orange)">Email</a>.</p>
+        </div>
+
+        <!-- SUB: Pagamento -->
+        <div class="subpanel" id="sub-pagamento">
+          <button class="back-btn" onclick="fecharSub('sub-pagamento')">← Voltar ao painel</button>
+          <div class="subpanel-title">💳 Informações de Pagamento</div>
+          <p style="color:var(--muted);font-size:0.88rem;margin-bottom:20px;line-height:1.6;">Após efetuar o pagamento, envie o comprovante pelo WhatsApp ou Email para ativar/renovar seu plano.</p>
+          <div class="pag-box">
+            <div class="pag-label">🟩 PIX</div>
+            <div class="pag-key">754f7067-b553-4e1b-860a-de5f31f0d071</div>
+            <button class="copy-btn" onclick="copiar('754f7067-b553-4e1b-860a-de5f31f0d071',this)">📋 Copiar Chave</button>
+          </div>
+          <div class="pag-box">
+            <div class="pag-label">🔷 USDT ERC20 (Ethereum)</div>
+            <div class="pag-key">0x56ABD8ca962bF67B2BD63364E2e8862a1aD4Cc0b</div>
+            <button class="copy-btn" onclick="copiar('0x56ABD8ca962bF67B2BD63364E2e8862a1aD4Cc0b',this)">📋 Copiar Endereço</button>
+          </div>
+          <div class="pag-box">
+            <div class="pag-label">🔶 USDT TRC20 (Tron)</div>
+            <div class="pag-key">TXzWhhvYqBgVjYg2cxUdGoxYBb9JKCqP4U</div>
+            <button class="copy-btn" onclick="copiar('TXzWhhvYqBgVjYg2cxUdGoxYBb9JKCqP4U',this)">📋 Copiar Endereço</button>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;">
+            <a href="https://wa.me/554896437522" target="_blank" class="btn-primary" style="font-size:0.88rem;padding:12px 20px;">💬 Enviar Comprovante WhatsApp</a>
+            <a href="/cdn-cgi/l/email-protection#dba8aeabb4a9afbeb8b4b2b5b6baabb7a29bbcb6bab2b7f5b8b4b6e4a8aeb9b1beb8afe698b4b6aba9b4adbab5afbefbbfbefb8bbabcbab6beb5afb4fb98b4b2b596baabb7a2" class="btn-secondary" style="font-size:0.88rem;padding:12px 20px;">📧 Enviar por Email</a>
+          </div>
+        </div>
+
+        <!-- SUB: Avisos -->
+        <div class="subpanel" id="sub-avisos">
+          <button class="back-btn" onclick="fecharSub('sub-avisos')">← Voltar ao painel</button>
+          <div class="subpanel-title">🔔 Avisos do CoinMaply</div>
+          <div id="avisos-lista"><div style="color:var(--muted);text-align:center;padding:30px;">⏳ Carregando avisos...</div></div>
+        </div>
+      </div><!-- /painel-logado -->
+    </div><!-- /tab-login -->
+
+    <!-- TAB RECUPERAR SENHA -->
+    <div class="tab-panel" id="tab-recuperar">
+      <div id="rec-step1">
+        <div class="steps-bar"><div class="step-line done" id="rl1"></div><div class="step-line" id="rl2"></div><div class="step-line" id="rl3"></div></div>
+        <p style="color:var(--muted);font-size:0.9rem;margin-bottom:20px;">Passo 1 de 3 — Digite o email da sua conta</p>
+        <div class="form-group"><label>Email</label><input type="email" id="rec-email" placeholder="seu@email.com"/></div>
+        <div id="rec-err1" style="display:none;color:#ff6b6b;font-size:0.85rem;margin-bottom:12px;padding:10px;background:rgba(255,107,107,0.1);border-radius:8px;"></div>
+        <button class="btn-primary" onclick="recStep1()" style="width:100%;">Próximo →</button>
+      </div>
+      <div id="rec-step2" style="display:none;">
+        <div class="steps-bar"><div class="step-line done" id="rl1b"></div><div class="step-line done" id="rl2b"></div><div class="step-line" id="rl3b"></div></div>
+        <p style="color:var(--muted);font-size:0.9rem;margin-bottom:20px;">Passo 2 de 3 — Responda sua pergunta de segurança</p>
+        <div id="rec-question-text" style="font-weight:700;margin-bottom:16px;color:var(--orange);"></div>
+        <div class="form-group"><label>Sua Resposta</label><input type="text" id="rec-answer" placeholder="Digite sua resposta..."/></div>
+        <div id="rec-err2" style="display:none;color:#ff6b6b;font-size:0.85rem;margin-bottom:12px;padding:10px;background:rgba(255,107,107,0.1);border-radius:8px;"></div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-secondary" onclick="recVoltar()" style="flex:1;">← Voltar</button>
+          <button class="btn-primary" onclick="recStep2()" style="flex:2;">Próximo →</button>
+        </div>
+      </div>
+      <div id="rec-step3" style="display:none;">
+        <div class="steps-bar"><div class="step-line done"></div><div class="step-line done"></div><div class="step-line done"></div></div>
+        <p style="color:var(--muted);font-size:0.9rem;margin-bottom:20px;">Passo 3 de 3 — Crie uma nova senha</p>
+        <div class="form-group"><label>Nova Senha</label>
+          <div style="position:relative;"><input type="password" id="rec-senha1" placeholder="Mínimo 6 caracteres" style="width:100%;padding-right:44px;"/>
+          <button type="button" onclick="togglePwd('rec-senha1','ri1')" id="ri1" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);">👁️</button></div>
+        </div>
+        <div class="form-group"><label>Confirmar Nova Senha</label>
+          <div style="position:relative;"><input type="password" id="rec-senha2" placeholder="Repita a senha" style="width:100%;padding-right:44px;"/>
+          <button type="button" onclick="togglePwd('rec-senha2','ri2')" id="ri2" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);">👁️</button></div>
+        </div>
+        <div id="rec-err3" style="display:none;color:#ff6b6b;font-size:0.85rem;margin-bottom:12px;padding:10px;background:rgba(255,107,107,0.1);border-radius:8px;"></div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-secondary" onclick="recStep2back()" style="flex:1;">← Voltar</button>
+          <button class="btn-primary" onclick="recStep3()" style="flex:2;" id="btn-rec3">🔑 Redefinir Senha</button>
+        </div>
+      </div>
+      <div id="rec-sucesso" style="display:none;text-align:center;padding:30px;">
+        <div style="font-size:3rem;margin-bottom:12px;">✅</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;color:var(--orange);margin-bottom:8px;">Senha redefinida!</div>
+        <p style="color:var(--muted);font-size:0.88rem;">Agora faça login com sua nova senha.</p>
+        <button class="btn-primary" onclick="switchTab('tab-login')" style="margin-top:20px;">🔑 Ir para Login</button>
+      </div>
+    </div><!-- /tab-recuperar -->
+  </div><!-- /owner-card -->
+</section>
+
+<!-- DOWNLOAD -->
+<section class="download-section" id="download">
+  <div class="section-label" style="margin-bottom:12px;">Download</div>
+  <h2>Baixe agora.<br/>É <span style="color:var(--orange)">gratuito.</span></h2>
+  <p>Encontre estabelecimentos que aceitam cripto perto de você. Disponível para Android.</p>
+  <a href="https://github.com/coinmaply-wq/coinmaply-releases/releases/download/v9.0/CoinMaply_v9.apk" class="btn-primary" style="margin:0 auto;">🤖 Download Android APK</a>
+  <div class="version-info">Versão 1.0.9 Beta • Android 8.0+</div>
+  <p style="color:var(--muted);font-size:0.85rem;margin-top:12px;">🍎 iPhone — Em breve na App Store</p>
+</section>
+
+<!-- SUPORTE -->
+<section class="suporte-section" id="suporte">
+  <div class="suporte-inner">
+    <div class="section-label">Fale Conosco</div>
+    <h2 class="section-title">Suporte <span>CoinMaply</span></h2>
+    <p class="section-sub" style="margin:0 auto;">Estamos aqui para ajudar!</p>
+    <div class="suporte-cards">
+      <a href="https://wa.me/554896437522" target="_blank" class="suporte-card">
+        <div class="suporte-icon">💬</div><div class="suporte-title">WhatsApp</div>
+        <div class="suporte-desc">Atendimento rápido. Resposta em até 24h.</div>
+        <span class="suporte-link">Abrir WhatsApp →</span>
+      </a>
+      <a href="/cdn-cgi/l/email-protection#7f0c0a0f100d0b1a1c101611121e0f13063f18121e1613511c1012" class="suporte-card">
+        <div class="suporte-icon">✉️</div><div class="suporte-title">Email de Suporte</div>
+        <div class="suporte-desc"><span class="__cf_email__" data-cfemail="720107021d000617111d1b1c1f13021e0b32151f131b1e5c111d1f">[email&#160;protected]</span></div>
+        <span class="suporte-link">Enviar Email →</span>
+      </a>
+      <a href="https://www.instagram.com/coinmaply" target="_blank" class="suporte-card">
+        <div class="suporte-icon">📸</div><div class="suporte-title">Instagram</div>
+        <div class="suporte-desc">Mande uma mensagem no @coinmaply.</div>
+        <span class="suporte-link">Abrir Instagram →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="social-section">
+  <div class="social-title">Siga o CoinMaply 🚀</div>
+  <div class="social-links">
+    <a href="https://www.instagram.com/coinmaply" target="_blank" class="social-link">📸 Instagram</a>
+    <a href="https://wa.me/554896437522" target="_blank" class="social-link">💬 WhatsApp</a>
+    <a href="https://youtube.com/@CoinMaplyApp" target="_blank" class="social-link">▶️ YouTube</a>
+    <a href="https://www.tiktok.com/@coinmaply.app" target="_blank" class="social-link">🎵 TikTok</a>
+    <a href="https://k.kwai.com/u/@coinmaplyapp/NCrxMHIO" target="_blank" class="social-link">🎬 Kwai</a>
+    <a href="/cdn-cgi/l/email-protection#8dfef8fde2fff9e8eee2e4e3e0ecfde1f4cdeae0ece4e1a3eee2e0" class="social-link">✉️ Email</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">🪙 CoinMaply</div>
+  <div class="footer-text">© 2026 CoinMaply. Todos os direitos reservados.<br/>Feito com ❤️ para a comunidade cripto brasileira.<br/><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="433036332c313726202c2a2d2e22332f3a03242e222a2f6d202c2e">[email&#160;protected]</a></div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const SUPABASE_URL = 'https://jqtguxggubciwmklpclx.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxdGd1eGdndWJjaXdta2xwY2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDU0MzAsImV4cCI6MjA4NzM4MTQzMH0.gDhOIZNWDdBxNYqu_EIO-1N-pcTTto7bELWkOFbgECc';
+const PERGUNTAS = ['Nome do seu primeiro carro?','Os últimos 4 números do seu CPF?','Os 3 primeiros números do seu RG?'];
+const FOTO_LIMITE = {basic:0,pro:2,premium:4,enterprise:8};
+
+let ownerLogado = null;
+let estLogado = null;
+let todosEstabelecimentos = [];
+let recOwner = null;
+
+// ====== UTILS ======
+function sb(path,opts={}){
+  return fetch(SUPABASE_URL+path,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json',...(opts.headers||{})},method:opts.method||'GET',body:opts.body});
+}
+function togglePwd(id,btnId){const i=document.getElementById(id);const b=document.getElementById(btnId);i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'👁️':'🙈';}
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+function abrirCadastro(){const s=document.getElementById('cadastro-form');s.style.display='block';setTimeout(()=>s.scrollIntoView({behavior:'smooth'}),100);}
+function abrirProprietario(){const s=document.getElementById('area-proprietario');s.style.display='block';setTimeout(()=>s.scrollIntoView({behavior:'smooth'}),100);}
+function copiar(txt,btn){navigator.clipboard.writeText(txt).then(()=>{const orig=btn.textContent;btn.textContent='✅ Copiado!';setTimeout(()=>btn.textContent=orig,2000);});}
+function mostrarErro(id,msg){const e=document.getElementById(id);e.textContent=msg;e.style.display='block';}
+function ocultarErro(id){document.getElementById(id).style.display='none';}
+function showMsg(id,msg,ok){const e=document.getElementById(id);e.textContent=msg;e.style.background=ok?'rgba(37,211,102,0.1)':'rgba(255,107,107,0.1)';e.style.color=ok?'#25d366':'#ff6b6b';e.style.border=ok?'1px solid rgba(37,211,102,0.3)':'1px solid rgba(255,107,107,0.3)';e.style.display='block';if(ok)setTimeout(()=>e.style.display='none',3000);}
+
+// ====== TABS ======
+function switchTab(id){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.owner-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const idx=id==='tab-login'?0:1;
+  document.querySelectorAll('.owner-tab')[idx].classList.add('active');
+}
+
+// ====== SUBPANELS ======
+function abrirSub(id){
+  if(!estLogado&&(id==='sub-dados'||id==='sub-criptos'||id==='sub-fotos'||id==='sub-plano'||id==='sub-pagamento')){
+    // Proprietário sem estabelecimento aprovado ainda
+  }
+  document.getElementById('menu-painel').style.display='none';
+  document.querySelectorAll('.subpanel').forEach(s=>s.classList.remove('open'));
+  document.getElementById(id).classList.add('open');
+  if(id==='sub-avisos')carregarAvisos();
+  if(id==='sub-fotos')renderFotos();
+  if(id==='sub-plano')renderPlano();
+  if(id==='sub-dados')preencherDados();
+  if(id==='sub-criptos')preencherCriptos();
+}
+function fecharSub(id){
+  document.getElementById(id).classList.remove('open');
+  document.getElementById('menu-painel').style.display='block';
+}
+
+// ====== INIT — restaurar sessão ======
+function initSessao(){
+  try{
+    const o=sessionStorage.getItem('owner');
+    const e=sessionStorage.getItem('est');
+    if(o){
+      ownerLogado=JSON.parse(o);
+      estLogado=e&&e!=='null'?JSON.parse(e):null;
+      renderPainel();
+    }
+  }catch(ex){}
+}
+
+// ====== CATEGORIAS E ESTABELECIMENTOS ======
+async function carregarCategorias(){
+  try{
+    const r=await sb('/rest/v1/categories?select=name&order=name');
+    const data=await r.json();
+    if(data&&data.length){
+      const selF=document.getElementById('f-categoria');
+      selF.innerHTML='<option value="">Selecione...</option>'+data.map(c=>`<option>${c.name}</option>`).join('');
+      const selBusca=document.getElementById('busca-categoria');
+      selBusca.innerHTML='<option value="">Todas as categorias</option>'+data.map(c=>`<option>${c.name}</option>`).join('');
+    }
+  }catch(e){console.error(e);}
+}
+async function carregarEstabelecimentos(){
+  try{
+    const r=await sb('/rest/v1/establishments?select=name,category,address,city,state,phone,whatsapp,cryptos,description&order=name');
+    todosEstabelecimentos=await r.json();
+    filtrarEstabelecimentos();
+  }catch(e){
+    document.getElementById('lista-estabelecimentos').innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);grid-column:1/-1;">❌ Erro ao carregar.</div>';
+  }
+}
+function filtrarEstabelecimentos(){
+  const busca=document.getElementById('busca-nome').value.toLowerCase();
+  const cat=document.getElementById('busca-categoria').value;
+  const lista=document.getElementById('lista-estabelecimentos');
+  const vazia=document.getElementById('lista-vazia');
+  let f=todosEstabelecimentos.filter(e=>{
+    const mb=!busca||e.name?.toLowerCase().includes(busca)||e.city?.toLowerCase().includes(busca)||e.address?.toLowerCase().includes(busca);
+    const mc=!cat||e.category===cat;
+    return mb&&mc;
+  });
+  if(!f.length){lista.innerHTML='';vazia.style.display='block';return;}
+  vazia.style.display='none';
+  lista.innerHTML=f.map(e=>{
+    const criptos=Array.isArray(e.cryptos)?e.cryptos.slice(0,3).join(', '):(e.cryptos||'');
+    return`<div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(255,149,0,0.4)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;">${e.name||''}</div>
+        <span style="background:rgba(255,149,0,0.1);color:var(--orange);font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;margin-left:8px;">${e.category||''}</span>
+      </div>
+      <div style="color:var(--muted);font-size:0.85rem;margin-bottom:8px;">📍 ${e.address||''}${e.city?' — '+e.city:''}${e.state?'/'+e.state:''}</div>
+      ${e.description?`<div style="color:var(--muted);font-size:0.82rem;line-height:1.5;margin-bottom:10px;">${e.description.substring(0,80)}${e.description.length>80?'...':''}</div>`:''}
+      <div style="color:var(--orange);font-size:0.8rem;font-weight:600;">₿ ${criptos}</div>
+      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+        ${e.phone?`<a href="tel:${e.phone}" style="background:#111;border:1px solid var(--border);color:var(--text);text-decoration:none;padding:7px 14px;border-radius:8px;font-size:0.8rem;">📞 Ligar</a>`:''}
+        ${e.whatsapp?`<a href="https://wa.me/55${e.whatsapp.replace(/\D/g,'')}" target="_blank" style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#25d366;text-decoration:none;padding:7px 14px;border-radius:8px;font-size:0.8rem;">💬 WhatsApp</a>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ====== LOGIN ======
+async function fazerLogin(){
+  ocultarErro('login-error');
+  const email=document.getElementById('ow-email').value.trim().toLowerCase();
+  const senha=document.getElementById('ow-senha').value;
+  if(!email||!senha){mostrarErro('login-error','Preencha email e senha.');return;}
+  const btn=document.getElementById('btn-login');btn.textContent='⏳ Entrando...';btn.disabled=true;
+  try{
+    const r=await sb('/rest/v1/owners?email=eq.'+encodeURIComponent(email)+'&select=*',{});
+    if(!r.ok){mostrarErro('login-error','Erro de conexão.');btn.textContent='🔓 Entrar';btn.disabled=false;return;}
+    const owners=await r.json();
+    if(!owners||owners.length===0){mostrarErro('login-error','Email não encontrado.');btn.textContent='🔓 Entrar';btn.disabled=false;return;}
+    const owner=owners[0];
+    if(owner.password_hash!==senha){mostrarErro('login-error','Senha incorreta.');btn.textContent='🔓 Entrar';btn.disabled=false;return;}
+    ownerLogado=owner;
+    const re=await sb('/rest/v1/establishments?email=eq.'+encodeURIComponent(email)+'&select=*',{});
+    const ests=re.ok?await re.json():[];
+    estLogado=ests&&ests.length>0?ests[0]:null;
+    sessionStorage.setItem('owner',JSON.stringify(owner));
+    sessionStorage.setItem('est',JSON.stringify(estLogado));
+    renderPainel();
+  }catch(e){mostrarErro('login-error','Erro de conexão. Tente novamente.');btn.textContent='🔓 Entrar';btn.disabled=false;}
+}
+function renderPainel(){
+  document.getElementById('login-form').style.display='none';
+  document.getElementById('painel-logado').style.display='block';
+  document.getElementById('ow-nome-display').textContent=ownerLogado.name||ownerLogado.email;
+  document.getElementById('ow-email-display').textContent=ownerLogado.email;
+  const badge=document.getElementById('ow-status-badge');
+  const st=estLogado?.status||'pending';
+  badge.className='status-badge '+(st==='active'?'s-active':st==='blocked'?'s-blocked':'s-pending');
+  badge.textContent=st==='active'?'✅ Ativo':st==='blocked'?'🔒 Bloqueado':'⏳ Pendente';
+}
+function fazerLogout(){
+  ownerLogado=null;estLogado=null;
+  sessionStorage.removeItem('owner');sessionStorage.removeItem('est');
+  document.getElementById('painel-logado').style.display='none';
+  document.getElementById('login-form').style.display='block';
+  document.getElementById('ow-email').value='';document.getElementById('ow-senha').value='';
+  document.querySelectorAll('.subpanel').forEach(s=>s.classList.remove('open'));
+  document.getElementById('menu-painel').style.display='block';
+  document.getElementById('btn-login').textContent='🔓 Entrar';
+  document.getElementById('btn-login').disabled=false;
+}
+
+// ====== EDITAR DADOS ======
+function preencherDados(){
+  if(!estLogado)return;
+  const campos={
+    'ed-nome':estLogado.name,'ed-telefone':estLogado.phone,'ed-whatsapp':estLogado.whatsapp,
+    'ed-address':estLogado.address,'ed-cidade':estLogado.city,'ed-estado':estLogado.state,'ed-descricao':estLogado.description
+  };
+  for(const[id,val]of Object.entries(campos)){const el=document.getElementById(id);if(el)el.value=val||'';}
+}
+async function salvarDados(){
+  if(!estLogado){showMsg('ed-msg','Estabelecimento não encontrado.',false);return;}
+  const cidade=document.getElementById('ed-cidade').value.trim();
+  const estado=document.getElementById('ed-estado').value.trim().toUpperCase();
+  const body={
+    name:document.getElementById('ed-nome').value.trim()||undefined,
+    phone:document.getElementById('ed-telefone').value.trim()||null,
+    whatsapp:document.getElementById('ed-whatsapp').value.trim()||null,
+    address:document.getElementById('ed-address').value.trim()||null,
+    city:cidade||null,state:estado||null,
+    description:document.getElementById('ed-descricao').value.trim()||null,
+    updated_at:new Date().toISOString()
+  };
+  try{
+    const r=await sb('/rest/v1/establishments?id=eq.'+estLogado.id,{method:'PATCH',body:JSON.stringify(body)});
+    if(r.ok||r.status===204){estLogado={...estLogado,...body};sessionStorage.setItem('est',JSON.stringify(estLogado));showMsg('ed-msg','✅ Dados salvos!',true);}
+    else showMsg('ed-msg','❌ Erro ao salvar.',false);
+  }catch(e){showMsg('ed-msg','❌ Erro de conexão.',false);}
+}
+
+// ====== CRIPTOS ======
+function preencherCriptos(){
+  const atuais=Array.isArray(estLogado?.cryptos)?estLogado.cryptos:[];
+  document.querySelectorAll('#sub-criptos input[type=checkbox]').forEach(cb=>{cb.checked=atuais.includes(cb.value);});
+}
+async function salvarCriptos(){
+  if(!estLogado){showMsg('cripto-msg','Estabelecimento não encontrado.',false);return;}
+  const selecionadas=Array.from(document.querySelectorAll('#sub-criptos input[type=checkbox]:checked')).map(c=>c.value);
+  if(!selecionadas.length){showMsg('cripto-msg','Selecione ao menos uma criptomoeda.',false);return;}
+  try{
+    const r=await sb('/rest/v1/establishments?id=eq.'+estLogado.id,{method:'PATCH',body:JSON.stringify({cryptos:selecionadas,updated_at:new Date().toISOString()})});
+    if(r.ok||r.status===204){estLogado.cryptos=selecionadas;sessionStorage.setItem('est',JSON.stringify(estLogado));showMsg('cripto-msg','✅ Criptomoedas salvas!',true);}
+    else showMsg('cripto-msg','❌ Erro ao salvar.',false);
+  }catch(e){showMsg('cripto-msg','❌ Erro de conexão.',false);}
+}
+
+// ====== FOTOS ======
+function renderFotos(){
+  if(!estLogado)return;
+  const plano=estLogado.plan||'basic';
+  const limite=FOTO_LIMITE[plano]||0;
+  const fotos=Array.isArray(estLogado.photos)?estLogado.photos:[];
+  document.getElementById('fotos-limite').textContent=`Plano ${plano}: ${fotos.length}/${limite} fotos utilizadas`;
+  const grid=document.getElementById('fotos-grid');
+  grid.innerHTML='';
+  fotos.forEach((url,i)=>{
+    const d=document.createElement('div');d.className='foto-box';
+    d.innerHTML=`<img src="${url}" loading="lazy"/><button class="foto-del" onclick="removerFoto(${i})">✕</button>`;
+    grid.appendChild(d);
+  });
+  if(fotos.length<limite){
+    const add=document.createElement('div');add.className='foto-add-btn';
+    add.innerHTML='<span style="font-size:1.8rem;">📷</span><span>Adicionar foto</span>';
+    add.onclick=()=>document.getElementById('foto-input').click();
+    grid.appendChild(add);
+  }
+}
+async function removerFoto(idx){
+  if(!estLogado)return;
+  const fotos=Array.isArray(estLogado.photos)?[...estLogado.photos]:[];
+  fotos.splice(idx,1);
+  try{
+    const r=await sb('/rest/v1/establishments?id=eq.'+estLogado.id,{method:'PATCH',body:JSON.stringify({photos:fotos,updated_at:new Date().toISOString()})});
+    if(r.ok||r.status===204){estLogado.photos=fotos;sessionStorage.setItem('est',JSON.stringify(estLogado));renderFotos();showMsg('fotos-msg','✅ Foto removida!',true);}
+    else showMsg('fotos-msg','❌ Erro ao remover.',false);
+  }catch(e){showMsg('fotos-msg','❌ Erro de conexão.',false);}
+}
+async function uploadFoto(input){
+  const file=input.files[0];if(!file)return;
+  const limite=FOTO_LIMITE[estLogado?.plan||'basic']||0;
+  const atual=Array.isArray(estLogado?.photos)?estLogado.photos:[];
+  if(atual.length>=limite){showMsg('fotos-msg',`❌ Limite de ${limite} fotos atingido para o plano ${estLogado.plan}.`,false);return;}
+  showMsg('fotos-msg','⏳ Enviando foto...',true);
+  const formData=new FormData();formData.append('file',file);
+  const path=`establishments/${estLogado.id}/${Date.now()}_${file.name}`;
+  try{
+    const r=await fetch(`${SUPABASE_URL}/storage/v1/object/establishment-photos/${path}`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY},body:formData});
+    if(!r.ok){showMsg('fotos-msg','❌ Erro no upload.',false);return;}
+    const url=`${SUPABASE_URL}/storage/v1/object/public/establishment-photos/${path}`;
+    const novasfotos=[...atual,url];
+    const r2=await sb('/rest/v1/establishments?id=eq.'+estLogado.id,{method:'PATCH',body:JSON.stringify({photos:novasfotos,updated_at:new Date().toISOString()})});
+    if(r2.ok||r2.status===204){estLogado.photos=novasfotos;sessionStorage.setItem('est',JSON.stringify(estLogado));renderFotos();showMsg('fotos-msg','✅ Foto adicionada!',true);}
+    else showMsg('fotos-msg','❌ Erro ao salvar.',false);
+  }catch(e){showMsg('fotos-msg','❌ Erro de conexão.',false);}
+  input.value='';
+}
+
+// ====== PLANO ======
+function renderPlano(){
+  if(!estLogado)return;
+  const plano=estLogado.plan||'basic';
+  ['basico','pro','premium','enterprise'].forEach(p=>{
+    const el=document.getElementById('plano-'+p);
+    if(el)el.classList.toggle('atual',plano===p||(p==='basico'&&plano==='basic'));
+  });
+  const trial=estLogado.trial_expiry;
+  const info=document.getElementById('plano-atual-info');
+  if(trial){const exp=new Date(trial);const hoje=new Date();const dias=Math.ceil((exp-hoje)/(1000*60*60*24));info.innerHTML=dias>0?`Trial ativo: <strong style="color:var(--orange)">${dias} dias restantes</strong>`:`Trial expirado em ${exp.toLocaleDateString('pt-BR')}`;}
+  else info.textContent=`Plano atual: ${plano}`;
+}
+
+// ====== AVISOS ======
+async function carregarAvisos(){
+  const lista=document.getElementById('avisos-lista');
+  lista.innerHTML='<div style="color:var(--muted);text-align:center;padding:20px;">⏳ Carregando...</div>';
+  try{
+    const r=await sb('/rest/v1/notifications?active=eq.true&order=created_at.desc');
+    const data=await r.json();
+    if(!data||!data.length){lista.innerHTML='<div style="color:var(--muted);text-align:center;padding:20px;">Nenhum aviso no momento.</div>';return;}
+    lista.innerHTML=data.map(n=>`
+      <div class="aviso-item">
+        <div class="av-title">📢 ${n.title}</div>
+        <div class="av-msg">${n.message}</div>
+        <div class="av-date">🕐 ${new Date(n.created_at).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+      </div>`).join('');
+  }catch(e){lista.innerHTML='<div style="color:#ff6b6b;text-align:center;padding:20px;">❌ Erro ao carregar avisos.</div>';}
+}
+
+// ====== RECUPERAR SENHA ======
+async function recStep1(){
+  ocultarErro('rec-err1');
+  const email=document.getElementById('rec-email').value.trim().toLowerCase();
+  if(!email){mostrarErro('rec-err1','Informe seu email.');return;}
+  try{
+    const r=await sb('/rest/v1/owners?email=eq.'+encodeURIComponent(email)+'&select=id,email,security_question,security_answer',{});
+    if(!r.ok){mostrarErro('rec-err1','Erro de conexão.');return;}
+    const rows=await r.json();
+    if(!rows||rows.length===0){mostrarErro('rec-err1','Email não encontrado.');return;}
+    recOwner=rows[0];
+    if(recOwner.security_question===null||recOwner.security_question===undefined){mostrarErro('rec-err1','Conta sem pergunta de segurança. Entre em contato com o suporte.');return;}
+    document.getElementById('rec-question-text').textContent='❓ '+PERGUNTAS[recOwner.security_question];
+    document.getElementById('rec-step1').style.display='none';
+    document.getElementById('rec-step2').style.display='block';
+  }catch(e){mostrarErro('rec-err1','Erro de conexão.');}
+}
+function recVoltar(){document.getElementById('rec-step2').style.display='none';document.getElementById('rec-step1').style.display='block';}
+function recStep2(){
+  ocultarErro('rec-err2');
+  const resp=document.getElementById('rec-answer').value.trim().toLowerCase();
+  if(!resp){mostrarErro('rec-err2','Digite sua resposta.');return;}
+  const correta=(recOwner.security_answer||'').toLowerCase().trim();
+  if(resp!==correta){mostrarErro('rec-err2','Resposta incorreta. Tente novamente.');return;}
+  document.getElementById('rec-step2').style.display='none';
+  document.getElementById('rec-step3').style.display='block';
+}
+function recStep2back(){document.getElementById('rec-step3').style.display='none';document.getElementById('rec-step2').style.display='block';}
+async function recStep3(){
+  ocultarErro('rec-err3');
+  const s1=document.getElementById('rec-senha1').value;
+  const s2=document.getElementById('rec-senha2').value;
+  if(!s1||s1.length<6){mostrarErro('rec-err3','Senha deve ter mínimo 6 caracteres.');return;}
+  if(s1!==s2){mostrarErro('rec-err3','Senhas não coincidem.');return;}
+  const btn=document.getElementById('btn-rec3');btn.textContent='⏳ Salvando...';btn.disabled=true;
+  try{
+    const r=await sb('/rest/v1/owners?id=eq.'+recOwner.id,{method:'PATCH',body:JSON.stringify({password_hash:s1,updated_at:new Date().toISOString()})});
+    if(r.ok||r.status===204){
+      document.getElementById('rec-step3').style.display='none';
+      document.getElementById('rec-sucesso').style.display='block';
+      return;
+    }else{mostrarErro('rec-err3','Erro ao salvar. Tente novamente.');}
+  }catch(e){mostrarErro('rec-err3','Erro de conexão.');}
+  finally{btn.textContent='🔑 Redefinir Senha';btn.disabled=false;}
+}
+
+// ====== FORMULARIO CADASTRO ======
+async function enviarFormulario(){
+  const erro=document.getElementById('form-error');erro.style.display='none';
+  const nome=document.getElementById('f-nome').value.trim();
+  const responsavel=document.getElementById('f-responsavel').value.trim();
+  const cpf=document.getElementById('f-cpf').value.trim();
+  const categoria=document.getElementById('f-categoria').value;
+  const telefone=document.getElementById('f-telefone').value.trim();
+  const whatsapp=document.getElementById('f-whatsapp').value.trim();
+  const rua=document.getElementById('f-rua').value.trim();
+  const numero=document.getElementById('f-numero').value.trim();
+  const bairro=document.getElementById('f-bairro').value.trim();
+  const cidade=document.getElementById('f-cidade').value.trim();
+  const estado=document.getElementById('f-estado').value.trim().toUpperCase();
+  const cep=document.getElementById('f-cep').value.trim();
+  const descricao=document.getElementById('f-descricao').value.trim();
+  const secQ=document.getElementById('f-sec-question').value;
+  const secA=document.getElementById('f-sec-answer').value.trim();
+  const email=document.getElementById('f-email').value.trim().toLowerCase();
+  const email2=document.getElementById('f-email2').value.trim().toLowerCase();
+  const senha=document.getElementById('f-senha').value;
+  const senha2=document.getElementById('f-senha2').value;
+  const criptos=Array.from(document.querySelectorAll('.cripto-grid input:checked')).map(c=>c.value);
+  function errar(m){erro.textContent=m;erro.style.display='block';return false;}
+  if(!nome)return errar('Informe o nome do estabelecimento.');
+  if(!responsavel)return errar('Informe o nome do responsável.');
+  if(!cpf)return errar('Informe o CPF do responsável.');
+  if(!categoria)return errar('Selecione a categoria.');
+  if(!telefone)return errar('Informe o telefone.');
+  if(!rua)return errar('Informe a rua/avenida.');
+  if(!cidade)return errar('Informe a cidade.');
+  if(!estado)return errar('Informe o estado (UF).');
+  if(secQ==='')return errar('Selecione uma pergunta de segurança.');
+  if(!secA)return errar('Responda a pergunta de segurança.');
+  if(!email)return errar('Informe o email.');
+  if(email!==email2)return errar('Os emails não coincidem.');
+  if(!senha||senha.length<6)return errar('Senha deve ter mínimo 6 caracteres.');
+  if(senha!==senha2)return errar('As senhas não coincidem.');
+  if(!criptos.length)return errar('Selecione ao menos uma criptomoeda.');
+  const btn=document.querySelector('#form-content .btn-primary');btn.textContent='⏳ Enviando...';btn.disabled=true;
+  const endFull=rua+(numero?', '+numero:'')+(bairro?', '+bairro:'')+(cidade?', '+cidade:'')+(estado?' - '+estado:'');
+  try{
+    const r1=await sb('/rest/v1/establishments',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({name:nome,category:categoria,phone:telefone,whatsapp:whatsapp||null,address:endFull,city:cidade,state:estado,description:descricao||null,email,cryptos:criptos,status:'pending',plan:'basic',created_at:new Date().toISOString()})});
+    if(!r1.ok&&r1.status!==201){errar('Erro ao enviar. Tente pelo WhatsApp.');btn.textContent='🚀 Enviar Cadastro';btn.disabled=false;return;}
+    await sb('/rest/v1/owners',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({name:responsavel,email,password_hash:senha,phone:telefone||null,cpf:cpf||null,security_question:parseInt(secQ),security_answer:secA.toLowerCase().trim(),created_at:new Date().toISOString(),updated_at:new Date().toISOString()})});
+        document.getElementById('form-content').style.display='none';
+    document.getElementById('form-success').style.display='block';
+    btn.textContent='🚀 Enviar Cadastro';btn.disabled=false;
+  }catch(e){errar('Erro de conexão. Tente pelo WhatsApp.');btn.textContent='🚀 Enviar Cadastro';btn.disabled=false;}
+}
+
+// ====== INIT ======
+document.addEventListener('DOMContentLoaded',function(){carregarCategorias();carregarEstabelecimentos();initSessao();});
+</script>
+</body>
+</html>

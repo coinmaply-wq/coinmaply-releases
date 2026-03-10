@@ -483,7 +483,7 @@
             <div class="plano-box" id="plano-premium"><div class="pl-nome">Premium</div><div class="pl-preco">R$100/mês</div><div class="pl-info">4 fotos<br/>Destaque premium</div></div>
             <div class="plano-box" id="plano-enterprise"><div class="pl-nome">Enterprise</div><div class="pl-preco">R$200/mês</div><div class="pl-info">8 fotos<br/>Suporte prioritário</div></div>
           </div>
-          <p style="color:var(--muted);font-size:0.82rem;margin-top:20px;line-height:1.6;">Para alterar seu plano, entre em contato via <a href="https://wa.me/554896437522" target="_blank" style="color:var(--orange)">WhatsApp</a> ou <a href="mailto:suportecoinmaply@gmail.com" style="color:var(--orange)">Email</a>.</p>
+          <p style="color:var(--muted);font-size:0.82rem;margin-top:20px;line-height:1.6;">Para alterar seu plano, entre em contato via <a href="https://wa.me/554896437522" target="_blank" style="color:var(--orange)">WhatsApp</a> ou <a href="/cdn-cgi/l/email-protection#681b1d18071a1c0d0b0701060509180411280f05090104460b0705" style="color:var(--orange)">Email</a>.</p>
         </div>
 
         <!-- SUB: Pagamento -->
@@ -508,7 +508,7 @@
           </div>
           <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;">
             <a href="https://wa.me/554896437522" target="_blank" class="btn-primary" style="font-size:0.88rem;padding:12px 20px;">💬 Enviar Comprovante WhatsApp</a>
-            <a href="mailto:suportecoinmaply@gmail.com?subject=Comprovante de Pagamento CoinMaply" class="btn-secondary" style="font-size:0.88rem;padding:12px 20px;">📧 Enviar por Email</a>
+            <a href="/cdn-cgi/l/email-protection#dba8aeabb4a9afbeb8b4b2b5b6baabb7a29bbcb6bab2b7f5b8b4b6e4a8aeb9b1beb8afe698b4b6aba9b4adbab5afbefbbfbefb8bbabcbab6beb5afb4fb98b4b2b596baabb7a2" class="btn-secondary" style="font-size:0.88rem;padding:12px 20px;">📧 Enviar por Email</a>
           </div>
         </div>
 
@@ -590,9 +590,9 @@
         <div class="suporte-desc">Atendimento rápido. Resposta em até 24h.</div>
         <span class="suporte-link">Abrir WhatsApp →</span>
       </a>
-      <a href="mailto:suportecoinmaply@gmail.com" class="suporte-card">
+      <a href="/cdn-cgi/l/email-protection#7f0c0a0f100d0b1a1c101611121e0f13063f18121e1613511c1012" class="suporte-card">
         <div class="suporte-icon">✉️</div><div class="suporte-title">Email de Suporte</div>
-        <div class="suporte-desc">suportecoinmaply@gmail.com</div>
+        <div class="suporte-desc"><span class="__cf_email__" data-cfemail="720107021d000617111d1b1c1f13021e0b32151f131b1e5c111d1f">[email&#160;protected]</span></div>
         <span class="suporte-link">Enviar Email →</span>
       </a>
       <a href="https://www.instagram.com/coinmaply" target="_blank" class="suporte-card">
@@ -612,16 +612,16 @@
     <a href="https://youtube.com/@CoinMaplyApp" target="_blank" class="social-link">▶️ YouTube</a>
     <a href="https://www.tiktok.com/@coinmaply.app" target="_blank" class="social-link">🎵 TikTok</a>
     <a href="https://k.kwai.com/u/@coinmaplyapp/NCrxMHIO" target="_blank" class="social-link">🎬 Kwai</a>
-    <a href="mailto:suportecoinmaply@gmail.com" class="social-link">✉️ Email</a>
+    <a href="/cdn-cgi/l/email-protection#8dfef8fde2fff9e8eee2e4e3e0ecfde1f4cdeae0ece4e1a3eee2e0" class="social-link">✉️ Email</a>
   </div>
 </section>
 
 <footer>
   <div class="footer-logo">🪙 CoinMaply</div>
-  <div class="footer-text">© 2026 CoinMaply. Todos os direitos reservados.<br/>Feito com ❤️ para a comunidade cripto brasileira.<br/>suportecoinmaply@gmail.com</div>
+  <div class="footer-text">© 2026 CoinMaply. Todos os direitos reservados.<br/>Feito com ❤️ para a comunidade cripto brasileira.<br/><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="433036332c313726202c2a2d2e22332f3a03242e222a2f6d202c2e">[email&#160;protected]</a></div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const SUPABASE_URL = 'https://jqtguxggubciwmklpclx.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxdGd1eGdndWJjaXdta2xwY2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDU0MzAsImV4cCI6MjA4NzM4MTQzMH0.gDhOIZNWDdBxNYqu_EIO-1N-pcTTto7bELWkOFbgECc';
 const PERGUNTAS = ['Nome do seu primeiro carro?','Os últimos 4 números do seu CPF?','Os 3 primeiros números do seu RG?'];
@@ -730,13 +730,16 @@ async function fazerLogin(){
   if(!email||!senha){mostrarErro('login-error','Preencha email e senha.');return;}
   const btn=document.getElementById('btn-login');btn.textContent='⏳ Entrando...';btn.disabled=true;
   try{
-    const r=await sb('/rest/v1/owners?email=eq.'+encodeURIComponent(email)+'&select=*',{headers:{'Accept':'application/vnd.pgrst.object+json'}});
-    if(!r.ok){mostrarErro('login-error','Email não encontrado.');btn.textContent='🔓 Entrar';btn.disabled=false;return;}
-    const owner=await r.json();
+    const r=await sb('/rest/v1/owners?email=eq.'+encodeURIComponent(email)+'&select=*',{});
+    if(!r.ok){mostrarErro('login-error','Erro de conexão.');btn.textContent='🔓 Entrar';btn.disabled=false;return;}
+    const owners=await r.json();
+    if(!owners||owners.length===0){mostrarErro('login-error','Email não encontrado.');btn.textContent='🔓 Entrar';btn.disabled=false;return;}
+    const owner=owners[0];
     if(owner.password!==senha){mostrarErro('login-error','Senha incorreta.');btn.textContent='🔓 Entrar';btn.disabled=false;return;}
     ownerLogado=owner;
-    const re=await sb('/rest/v1/establishments?email=eq.'+encodeURIComponent(email)+'&select=*',{headers:{'Accept':'application/vnd.pgrst.object+json'}});
-    estLogado=re.ok?await re.json():null;
+    const re=await sb('/rest/v1/establishments?email=eq.'+encodeURIComponent(email)+'&select=*',{});
+    const ests=re.ok?await re.json():[];
+    estLogado=ests&&ests.length>0?ests[0]:null;
     sessionStorage.setItem('owner',JSON.stringify(owner));
     sessionStorage.setItem('est',JSON.stringify(estLogado));
     renderPainel();
@@ -903,9 +906,11 @@ async function recStep1(){
   const email=document.getElementById('rec-email').value.trim().toLowerCase();
   if(!email){mostrarErro('rec-err1','Informe seu email.');return;}
   try{
-    const r=await sb('/rest/v1/owners?email=eq.'+encodeURIComponent(email)+'&select=id,email,security_question,security_answer',{headers:{'Accept':'application/vnd.pgrst.object+json'}});
-    if(!r.ok){mostrarErro('rec-err1','Email não encontrado.');return;}
-    recOwner=await r.json();
+    const r=await sb('/rest/v1/owners?email=eq.'+encodeURIComponent(email)+'&select=id,email,security_question,security_answer',{});
+    if(!r.ok){mostrarErro('rec-err1','Erro de conexão.');return;}
+    const rows=await r.json();
+    if(!rows||rows.length===0){mostrarErro('rec-err1','Email não encontrado.');return;}
+    recOwner=rows[0];
     if(recOwner.security_question===null||recOwner.security_question===undefined){mostrarErro('rec-err1','Conta sem pergunta de segurança. Entre em contato com o suporte.');return;}
     document.getElementById('rec-question-text').textContent='❓ '+PERGUNTAS[recOwner.security_question];
     document.getElementById('rec-step1').style.display='none';
@@ -986,18 +991,4 @@ async function enviarFormulario(){
     const r1=await sb('/rest/v1/establishments',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({name:nome,category:categoria,cnpj:document.getElementById('f-cnpj-num').value.trim()||null,phone:telefone,whatsapp:whatsapp||null,street:rua,number:numero||null,neighborhood:bairro||null,city:cidade,state:estado,cep:cep||null,address:endFull,description:descricao||null,email,cryptos:criptos,responsavel,cpf,status:'pending',plan:'basic',created_at:new Date().toISOString()})});
     if(!r1.ok&&r1.status!==201){errar('Erro ao enviar. Tente pelo WhatsApp.');btn.textContent='🚀 Enviar Cadastro';btn.disabled=false;return;}
     await sb('/rest/v1/owners',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({name:responsavel,email,password:senha,phone:telefone||null,cpf:cpf||null,security_question:parseInt(secQ),security_answer:secA.toLowerCase().trim(),created_at:new Date().toISOString(),updated_at:new Date().toISOString()})});
-    document.getElementById('form-content').style.display='none';
-    document.getElementById('form-success').style.display='block';
-  }catch(e){errar('Erro de conexão. Verifique sua internet.');btn.textContent='🚀 Enviar Cadastro';btn.disabled=false;}
-}
-
-// ====== INIT ======
-carregarCategorias();
-carregarEstabelecimentos();
-// Recuperar sessão
-const savedOwner=sessionStorage.getItem('owner');
-const savedEst=sessionStorage.getItem('est');
-if(savedOwner){ownerLogado=JSON.parse(savedOwner);estLogado=savedEst?JSON.parse(savedEst):null;renderPainel();}
-</script>
-</body>
-</html>
+    docume

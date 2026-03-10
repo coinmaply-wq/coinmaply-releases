@@ -423,14 +423,7 @@
             <div class="form-group"><label>Telefone</label><input type="text" id="ed-telefone" placeholder="(48) 99999-9999"/></div>
             <div class="form-group"><label>WhatsApp</label><input type="text" id="ed-whatsapp" placeholder="(48) 99999-9999"/></div>
           </div>
-          <div class="form-row">
-            <div class="form-group"><label>Rua/Av</label><input type="text" id="ed-rua" placeholder="Rua..."/></div>
-            <div class="form-group"><label>Número</label><input type="text" id="ed-numero" placeholder="Nº"/></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label>Bairro</label><input type="text" id="ed-bairro" placeholder="Bairro"/></div>
-            <div class="form-group"><label>CEP</label><input type="text" id="ed-cep" placeholder="00000-000"/></div>
-          </div>
+          <div class="form-group"><label>Endereço Completo</label><input type="text" id="ed-address" placeholder="Ex: Rua Faria Lima, 450 — Centro, São Paulo - SP"/></div>
           <div class="form-row">
             <div class="form-group"><label>Cidade</label><input type="text" id="ed-cidade" placeholder="Cidade"/></div>
             <div class="form-group"><label>Estado</label><input type="text" id="ed-estado" placeholder="SC" maxlength="2" style="text-transform:uppercase;"/></div>
@@ -445,18 +438,18 @@
           <button class="back-btn" onclick="fecharSub('sub-criptos')">← Voltar ao painel</button>
           <div class="subpanel-title">💰 Criptomoedas Aceitas</div>
           <div class="cripto-panel" id="cripto-panel-list">
-            <label class="cripto-panel"><input type="checkbox" value="Bitcoin (BTC)"/> Bitcoin (BTC)</label>
-            <label class="cripto-panel"><input type="checkbox" value="Ethereum (ETH)"/> Ethereum (ETH)</label>
-            <label class="cripto-panel"><input type="checkbox" value="USDT"/> USDT</label>
-            <label class="cripto-panel"><input type="checkbox" value="USDC"/> USDC</label>
-            <label class="cripto-panel"><input type="checkbox" value="BNB"/> BNB</label>
-            <label class="cripto-panel"><input type="checkbox" value="XRP"/> XRP</label>
-            <label class="cripto-panel"><input type="checkbox" value="Solana (SOL)"/> Solana (SOL)</label>
-            <label class="cripto-panel"><input type="checkbox" value="Litecoin (LTC)"/> Litecoin (LTC)</label>
-            <label class="cripto-panel"><input type="checkbox" value="Dogecoin"/> Dogecoin</label>
-            <label class="cripto-panel"><input type="checkbox" value="Polygon"/> Polygon</label>
-            <label class="cripto-panel"><input type="checkbox" value="PIX Cripto"/> PIX Cripto</label>
-            <label class="cripto-panel"><input type="checkbox" value="Outra"/> Outra</label>
+            <label><input type="checkbox" value="Bitcoin (BTC)"/> Bitcoin (BTC)</label>
+            <label><input type="checkbox" value="Ethereum (ETH)"/> Ethereum (ETH)</label>
+            <label><input type="checkbox" value="USDT"/> USDT</label>
+            <label><input type="checkbox" value="USDC"/> USDC</label>
+            <label><input type="checkbox" value="BNB"/> BNB</label>
+            <label><input type="checkbox" value="XRP"/> XRP</label>
+            <label><input type="checkbox" value="Solana (SOL)"/> Solana (SOL)</label>
+            <label><input type="checkbox" value="Litecoin (LTC)"/> Litecoin (LTC)</label>
+            <label><input type="checkbox" value="Dogecoin"/> Dogecoin</label>
+            <label><input type="checkbox" value="Polygon"/> Polygon</label>
+            <label><input type="checkbox" value="PIX Cripto"/> PIX Cripto</label>
+            <label><input type="checkbox" value="Outra"/> Outra</label>
           </div>
           <div id="cripto-msg" style="display:none;margin:12px 0;padding:10px 14px;border-radius:8px;font-size:0.85rem;"></div>
           <button class="btn-primary" onclick="salvarCriptos()" style="width:100%;margin-top:20px;">💾 Salvar Criptomoedas</button>
@@ -656,6 +649,9 @@ function switchTab(id){
 
 // ====== SUBPANELS ======
 function abrirSub(id){
+  if(!estLogado&&(id==='sub-dados'||id==='sub-criptos'||id==='sub-fotos'||id==='sub-plano'||id==='sub-pagamento')){
+    // Proprietário sem estabelecimento aprovado ainda
+  }
   document.getElementById('menu-painel').style.display='none';
   document.querySelectorAll('.subpanel').forEach(s=>s.classList.remove('open'));
   document.getElementById(id).classList.add('open');
@@ -668,6 +664,19 @@ function abrirSub(id){
 function fecharSub(id){
   document.getElementById(id).classList.remove('open');
   document.getElementById('menu-painel').style.display='block';
+}
+
+// ====== INIT — restaurar sessão ======
+function initSessao(){
+  try{
+    const o=sessionStorage.getItem('owner');
+    const e=sessionStorage.getItem('est');
+    if(o){
+      ownerLogado=JSON.parse(o);
+      estLogado=e&&e!=='null'?JSON.parse(e):null;
+      renderPainel();
+    }
+  }catch(ex){}
 }
 
 // ====== CATEGORIAS E ESTABELECIMENTOS ======
@@ -685,7 +694,7 @@ async function carregarCategorias(){
 }
 async function carregarEstabelecimentos(){
   try{
-    const r=await sb('/rest/v1/establishments?status=eq.active&select=name,category,address,street,number,neighborhood,city,state,phone,whatsapp,cryptos,description');
+    const r=await sb('/rest/v1/establishments?select=name,category,address,city,state,phone,whatsapp,cryptos,description&order=name');
     todosEstabelecimentos=await r.json();
     filtrarEstabelecimentos();
   }catch(e){
@@ -711,7 +720,7 @@ function filtrarEstabelecimentos(){
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;">${e.name||''}</div>
         <span style="background:rgba(255,149,0,0.1);color:var(--orange);font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;margin-left:8px;">${e.category||''}</span>
       </div>
-      <div style="color:var(--muted);font-size:0.85rem;margin-bottom:8px;">📍 ${e.street?(e.street+(e.number?', '+e.number:'')+(e.neighborhood?', '+e.neighborhood:'')):(e.address||'')} ${e.city?'— '+e.city:''} ${e.state?'/'+e.state:''}</div>
+      <div style="color:var(--muted);font-size:0.85rem;margin-bottom:8px;">📍 ${e.address||''}${e.city?' — '+e.city:''}${e.state?'/'+e.state:''}</div>
       ${e.description?`<div style="color:var(--muted);font-size:0.82rem;line-height:1.5;margin-bottom:10px;">${e.description.substring(0,80)}${e.description.length>80?'...':''}</div>`:''}
       <div style="color:var(--orange);font-size:0.8rem;font-weight:600;">₿ ${criptos}</div>
       <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
@@ -772,27 +781,21 @@ function preencherDados(){
   if(!estLogado)return;
   const campos={
     'ed-nome':estLogado.name,'ed-telefone':estLogado.phone,'ed-whatsapp':estLogado.whatsapp,
-    'ed-rua':estLogado.street,'ed-numero':estLogado.number,'ed-bairro':estLogado.neighborhood,
-    'ed-cep':estLogado.cep,'ed-cidade':estLogado.city,'ed-estado':estLogado.state,'ed-descricao':estLogado.description
+    'ed-address':estLogado.address,'ed-cidade':estLogado.city,'ed-estado':estLogado.state,'ed-descricao':estLogado.description
   };
   for(const[id,val]of Object.entries(campos)){const el=document.getElementById(id);if(el)el.value=val||'';}
 }
 async function salvarDados(){
   if(!estLogado){showMsg('ed-msg','Estabelecimento não encontrado.',false);return;}
-  const rua=document.getElementById('ed-rua').value.trim();
-  const num=document.getElementById('ed-numero').value.trim();
-  const bairro=document.getElementById('ed-bairro').value.trim();
   const cidade=document.getElementById('ed-cidade').value.trim();
   const estado=document.getElementById('ed-estado').value.trim().toUpperCase();
   const body={
     name:document.getElementById('ed-nome').value.trim()||undefined,
     phone:document.getElementById('ed-telefone').value.trim()||null,
     whatsapp:document.getElementById('ed-whatsapp').value.trim()||null,
-    street:rua||null,number:num||null,neighborhood:bairro||null,
-    cep:document.getElementById('ed-cep').value.trim()||null,
+    address:document.getElementById('ed-address').value.trim()||null,
     city:cidade||null,state:estado||null,
     description:document.getElementById('ed-descricao').value.trim()||null,
-    address:(rua+(num?', '+num:'')+(bairro?', '+bairro:'')+(cidade?', '+cidade:'')+(estado?' - '+estado:''))||estLogado.address,
     updated_at:new Date().toISOString()
   };
   try{
@@ -940,13 +943,13 @@ async function recStep3(){
     if(r.ok||r.status===204){
       document.getElementById('rec-step3').style.display='none';
       document.getElementById('rec-sucesso').style.display='block';
+      return;
     }else{mostrarErro('rec-err3','Erro ao salvar. Tente novamente.');}
   }catch(e){mostrarErro('rec-err3','Erro de conexão.');}
-  btn.textContent='🔑 Redefinir Senha';btn.disabled=false;
+  finally{btn.textContent='🔑 Redefinir Senha';btn.disabled=false;}
 }
 
 // ====== FORMULARIO CADASTRO ======
-function togglePwd(id,btnId){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';document.getElementById(btnId).textContent=i.type==='password'?'👁️':'🙈';}
 async function enviarFormulario(){
   const erro=document.getElementById('form-error');erro.style.display='none';
   const nome=document.getElementById('f-nome').value.trim();
@@ -988,7 +991,17 @@ async function enviarFormulario(){
   const btn=document.querySelector('#form-content .btn-primary');btn.textContent='⏳ Enviando...';btn.disabled=true;
   const endFull=rua+(numero?', '+numero:'')+(bairro?', '+bairro:'')+(cidade?', '+cidade:'')+(estado?' - '+estado:'');
   try{
-    const r1=await sb('/rest/v1/establishments',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({name:nome,category:categoria,cnpj:document.getElementById('f-cnpj-num').value.trim()||null,phone:telefone,whatsapp:whatsapp||null,street:rua,number:numero||null,neighborhood:bairro||null,city:cidade,state:estado,cep:cep||null,address:endFull,description:descricao||null,email,cryptos:criptos,responsavel,cpf,status:'pending',plan:'basic',created_at:new Date().toISOString()})});
+    const r1=await sb('/rest/v1/establishments',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({name:nome,category:categoria,phone:telefone,whatsapp:whatsapp||null,address:endFull,city:cidade,state:estado,description:descricao||null,email,cryptos:criptos,status:'pending',plan:'basic',created_at:new Date().toISOString()})});
     if(!r1.ok&&r1.status!==201){errar('Erro ao enviar. Tente pelo WhatsApp.');btn.textContent='🚀 Enviar Cadastro';btn.disabled=false;return;}
     await sb('/rest/v1/owners',{method:'POST',headers:{'Prefer':'return=minimal'},body:JSON.stringify({name:responsavel,email,password:senha,phone:telefone||null,cpf:cpf||null,security_question:parseInt(secQ),security_answer:secA.toLowerCase().trim(),created_at:new Date().toISOString(),updated_at:new Date().toISOString()})});
-    docume
+        document.getElementById('form-content').style.display='none';
+    document.getElementById('form-success').style.display='block';
+    btn.textContent='🚀 Enviar Cadastro';btn.disabled=false;
+  }catch(e){errar('Erro de conexão. Tente pelo WhatsApp.');btn.textContent='🚀 Enviar Cadastro';btn.disabled=false;}
+}
+
+// ====== INIT ======
+document.addEventListener('DOMContentLoaded',function(){carregarCategorias();carregarEstabelecimentos();initSessao();});
+</script>
+</body>
+</html>

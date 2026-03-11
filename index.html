@@ -702,7 +702,7 @@ async function carregarCategorias(){
 }
 async function carregarEstabelecimentos(){
   try{
-    const r=await sb('/rest/v1/establishments?select=name,category,address,city,state,phone,whatsapp,cryptos,description&order=name');
+    const r=await sb('/rest/v1/establishments?select=name,category,address,city,state,phone,whatsapp,cryptos,description&status=eq.active&order=name');
     todosEstabelecimentos=await r.json();
     filtrarEstabelecimentos();
   }catch(e){
